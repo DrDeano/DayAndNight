@@ -14,6 +14,7 @@ public class Main extends JFrame implements Runnable{
 	private static final long serialVersionUID = 1L;
 	private static boolean running;
 	private static int FPS;
+	private static float SPF;
 	private static long currentTime, previousTime, deltaTime;
 
 	public static void main(String args[]) {
@@ -25,17 +26,22 @@ public class Main extends JFrame implements Runnable{
 	
 	public void run() {
 		initialise();
-		int loops;
+		float deltas;
 		while (running) {
-			currentTime  = System.nanoTime();
-			deltaTime = currentTime - previousTime;
-			update(((float)deltaTime/1000000000f));
+			do{
+				currentTime  = System.nanoTime();
+				deltaTime = currentTime - previousTime;
+				deltas = ((float)deltaTime/1000000000f);
+			}while(deltas < SPF);
+			update(deltas);
 			draw();
+			previousTime = currentTime;
 		}
 	}
 
 	public void initialise() {
 		FPS = this.getGraphicsConfiguration().getDevice().getDisplayMode().getRefreshRate();
+		SPF = 1000000000f/FPS;
 		this.setTitle("Day And Night");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(InputHandler.screenSize);
