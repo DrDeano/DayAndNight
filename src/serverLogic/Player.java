@@ -53,6 +53,10 @@ public class Player {
 	public StatContainer getStats() {
 		return stats;
 	}
+	public double getSpeed() {
+		Stat[] arguments = {Stat.COFFEE, Stat.FUN, Stat.SANITY};
+		return Math.sqrt(stats.getPercentageProduct(arguments)); // Max speed is 1
+	}
 
 
 	private void move(double angle) {
@@ -77,6 +81,15 @@ public class Player {
 		while (angle >= 360)
 			angle -= 360;
 		return angle;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		try {
+			return ((Player) obj).getId() == this.getId();
+		} catch (ClassCastException e) {
+			return false;
+		}
 	}
 
 }
