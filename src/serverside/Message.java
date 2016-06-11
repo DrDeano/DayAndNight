@@ -1,93 +1,78 @@
-package serverside;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
- * A class used to store a message to be received by a client. Also contains a
- * command that tells the server sender what to do with the message
- * 
- * @author The_Dean
- *
+ * Abstract implementation of a Message.
+ * @author TauOmicronMu
  */
-public class Message {
-
-	private String msg;
-	private String[] msg2;
-	private String fromName;
-	private int command;
+public class Message implements Serializable {
 
 	/**
-	 * Create a new message class
-	 * 
-	 * @param name
-	 *            The sender
-	 * @param str
-	 *            The message
-	 * @param command
-	 *            The command that has been sent from the user so that the
-	 *            server sender knows what to do with the message
+	 * Default serial ID.
 	 */
-	public Message(String name, String str, int command) {
-		this.msg = str;
-		this.fromName = name;
-		this.command = command;
+	protected static final long serialVersionUID = 1L;
+	
+	/*
+	 * The time at the point of Message creation.
+	 */
+	protected final Date timestamp;
+	
+	/*
+	 * The nickname of the client that the Message is being
+	 * sent from.
+	 */
+	protected final String sender;
+	
+	/*
+	 * The command detailing what to do with the data -
+	 * for example, "EndGame".
+	 */
+	protected final MessageType messageType;
+	
+	/*
+	 * Holds data specific to the type of message to be sent. 
+	 */
+	protected final Object data;
+	
+	public Message(String sender, MessageType messageType, Object data) {
+		
+		this.sender = sender;
+		this.messageType = messageType;
+		this.data = data;
+		
+		this.timestamp = new Date();
 	}
 
 	/**
-	 * Create a new message class
-	 * 
-	 * @param name
-	 *            The sender
-	 * @param str
-	 *            The message array
-	 * @param command
-	 *            The command that has been sent from the user so that the
-	 *            server sender knows what to do with the message
+	 * Returns the fromClient attribute of the Message.
+	 * @return The nickname of the client that the Message is being sent from.
 	 */
-	public Message(String name, String[] str, int command) {
-		this.msg2 = str;
-		this.fromName = name;
-		this.command = command;
+	public String getSender() {
+		return sender;
+	}
+    
+	/**
+	 * Returns the messageCommand attribute of the Message.
+	 * @return The command detailing what to do with the data.
+	 */
+	public MessageType getMessageCommand() {
+		return messageType;
 	}
 
 	/**
-	 * Get the message for the receiver
-	 * 
-	 * @return The message for the receiver
+	 * Returns the data attribute of the Message.
+	 * @return The data held within the Message.
 	 */
-	public String getMsg() {
-		return msg;
+	public Object getData() {
+		return data;
 	}
 
 	/**
-	 * Get the message for the receiver
-	 * 
-	 * @return The message for the receiver
+	 * Returns the time at the point of Message creation.
+	 * @return the timestamp attribute of the Message.
 	 */
-	public String[] getMsgArray() {
-		return msg2;
-	}
-
-	/**
-	 * Get the name of the sender
-	 * 
-	 * @return The name of the sender
-	 */
-	public String getName() {
-		return fromName;
-	}
-
-	/**
-	 * Return the command that was entered by the user to send this message
-	 * 
-	 * @return The command
-	 */
-	public int getCommand() {
-		return command;
-	}
-
-	/**
-	 * A to string method for displaying the receiver and the message
-	 */
-	public String toString() {
-		return "From " + fromName + ": " + msg;
+	public Date getTimestamp() {
+		return timestamp;
 	}
 }
+
