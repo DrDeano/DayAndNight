@@ -31,20 +31,20 @@ public class ServerSender implements Runnable {
 				write_to_client(packet);
 				break;
 
-			case S_COMPUTER:
-
+			case COMPUTER:
+				write_to_client(packet);
 				break;
 
-			case S_COFFIE_MAKER:
-
+			case COFFIE_MAKER:
+				write_to_client(packet);
 				break;
 
-			case S_SOFA:
-
+			case SOFA:
+				write_to_client(packet);
 				break;
-				
-			case S_POOL_TABLE:
 
+			case POOL_TABLE:
+				write_to_client(packet);
 				break;
 				
 			case DISCONNECT:
