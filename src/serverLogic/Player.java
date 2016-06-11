@@ -3,6 +3,7 @@ package serverLogic;
 import java.awt.geom.Point2D;
 
 import globalClasses.Pos;
+import globalClasses.StatContainer;
 
 public class Player {
 
