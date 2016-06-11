@@ -1,13 +1,9 @@
 package main;
 
 import java.awt.Graphics;
-import java.awt.GraphicsDevice;
 import java.awt.Image;
-import java.awt.Toolkit;
 
 import javax.swing.JFrame;
-
-import utils.InputHandler;
 
 public class Main extends JFrame implements Runnable{
 
@@ -19,20 +15,26 @@ public class Main extends JFrame implements Runnable{
 
 	public static void main(String args[]) {
 		Main main = new Main();
-		running = true;
-		previousTime = System.nanoTime();
 		main.run();
 	}
 	
 	public void run() {
 		initialise();
 		float deltas;
+		long minute = 0;
+		int loops = 0;
 		while (running) {
 			do{
 				currentTime  = System.nanoTime();
 				deltaTime = currentTime - previousTime;
 				deltas = ((float)deltaTime/1000000000f);
 			}while(deltas < SPF);
+			minute+=deltaTime;
+			loops++;
+			if(minute>=1000000000){
+				System.out.println(loops);
+				loops = 0;
+			}
 			update(deltas);
 			draw();
 			previousTime = currentTime;
@@ -40,6 +42,8 @@ public class Main extends JFrame implements Runnable{
 	}
 
 	public void initialise() {
+		running = true;
+		previousTime = System.nanoTime();
 		FPS = this.getGraphicsConfiguration().getDevice().getDisplayMode().getRefreshRate();
 		SPF = 1000000000f/FPS;
 		this.setTitle("Day And Night");
