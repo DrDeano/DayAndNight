@@ -1,9 +1,14 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 
 import javax.swing.JFrame;
+
+import ahmed.Launcher;
+import ahmed.Level;
 
 public class Main extends JFrame{
 
@@ -13,6 +18,9 @@ public class Main extends JFrame{
 	private static float SPF;
 	private static long currentTime, previousTime, deltaTime;
 
+	
+	Level level;
+	
 	public static void main(String args[]) {
 		Main main = new Main();
 		main.run();
@@ -51,17 +59,23 @@ public class Main extends JFrame{
 		this.setSize(InputHandler.screenSize);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setVisible(true);
+		level=new Level(this);
+		level.init();
 	}
 
 	public void update(float deltaTime) {
-		
+		level.update();
 	}
 
 	public void draw() {
+		
 		Graphics g = this.getGraphics();
 		Image offImage = this.createImage(this.getWidth(), this.getHeight());
 		Graphics offGraphics = offImage.getGraphics();
+		level.render((Graphics2D)offGraphics);
+
 		g.drawImage(offImage, 0, 0, this.getWidth(), this.getHeight(), null);
+		
 	}
 
 }

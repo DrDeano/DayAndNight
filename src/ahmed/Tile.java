@@ -16,8 +16,8 @@ public class Tile {
 	
 	public static Tile sofa = new Tile(0, ImageLoader.sofa, 0xFFffaec9, true);
 	public static Tile computer = new Tile(1, ImageLoader.computer, 0xFFed1c24, true);
-	public static Tile coffee = new Tile(2, ImageLoader.coffee, 0xFFb97a57, true);
-	public static Tile floor = new Tile(2, ImageLoader.floor, 0xFFff7f27, false);
+	public static Tile coffee = new Tile(2, ImageLoader.coffee, 0xFFB97A57, true);
+	public static Tile floor = new Tile(3, ImageLoader.floor, 0xFFff7f27, false);
 	
 	
 	public Tile(int id, BufferedImage image, int tileColor, boolean solid){
