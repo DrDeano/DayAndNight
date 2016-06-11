@@ -2,13 +2,14 @@ package ahmed;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import javax.imageio.ImageIO;
+import main.Main;
+import utils.ResourceLoader;
 
 public class Level {
 
 	static int tileSize = 16;
 
-	Handler handler;
+	Main main;
 
 	int[][] objectTiles;
 	int[][] floorTiles;
@@ -16,8 +17,8 @@ public class Level {
 	int gridWidth = 0;
 	int gridHeight = 0;
 
-	public Level(Handler handler) {
-		this.handler = handler;
+	public Level(Main main) {
+		this.main=main;
 	}
 
 	public void init() {
@@ -81,7 +82,7 @@ public class Level {
 	}
 
 	public void render(Graphics2D g2) {
-		renderFloor(g2);
+//		renderFloor(g2);
 		for (int j = 0; j < objectTiles.length; j++) {
 			for (int i = 0; i < objectTiles[0].length; i++) {
 				Tile.objectTiles.get(objectTiles[j][i]).render(g2, tileSize * i, tileSize * j);

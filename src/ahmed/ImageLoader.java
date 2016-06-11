@@ -4,21 +4,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import utils.ResourceLoader;
+
 public class ImageLoader {
 	
-	public static BufferedImage sofa = loadImage("/sofa.png");
-	public static BufferedImage computer = loadImage("/computer.png");
-	public static BufferedImage coffee = loadImage("/coffee.png");
-	public static BufferedImage floor = loadImage("/floor.png");
-	public static BufferedImage objects = loadImage("/objects.png");
+	public static BufferedImage sofa = ResourceLoader.getBufferedImage("sofa.png");
+	public static BufferedImage computer = ResourceLoader.getBufferedImage("computer.png");
+	public static BufferedImage coffee = ResourceLoader.getBufferedImage("coffeeMaker.png");
+	public static BufferedImage floor = ResourceLoader.getBufferedImage("carpet.png");
+	public static BufferedImage objects = ResourceLoader.getBufferedImage("objects.png");
 	
-	public static BufferedImage loadImage(String path) {
-		try {
-			return ImageIO.read(ImageLoader.class.getResource(path));
-		} catch (IOException e) {
-			System.out.println("failed to load");
-			e.printStackTrace();
-		}
-		return null;
-	}
+
 }
