@@ -24,6 +24,9 @@ public class Player {
 	double x;
 	double y;
 
+	int scale = Tile.scale;
+	int tileSize = Tile.tileSize;
+
 	static final double baseSpeed = 5;
 
 	double moveSpeed = baseSpeed;
@@ -71,22 +74,40 @@ public class Player {
 
 		moveSpeed = sanity * baseSpeed;
 
+		double targetX = x;
+		double targetY = y;
+
 		if (left) {
-			x -= moveSpeed;
+			targetX -= moveSpeed;
+			
 		} else if (right) {
-			x += moveSpeed;
+			targetX += moveSpeed;
 		}
-		
+
 		if (up) {
-			y -= moveSpeed;
+			targetY -= moveSpeed;
 		} else if (down) {
-			y += moveSpeed;
+			targetY += moveSpeed;
+		}
+
+		if(!main.level.getTile(x/scale, y/scale).isSolid){
+			updateX(targetX);
+			updateY(targetY);
 		}
 		
 	}
+	
+	public void updateX(double targetX){
+		x=targetX;
+		// todo: send new x to Server
+	}
+	
+	public void updateY(double targetY){
+		y=targetY;
+		// todo: send new y to Server
+	}
 
 	public void render(Graphics2D g2) {
-		int scale = Tile.scale;
-		g2.drawImage(image,(int)x*scale, (int)y*scale, Tile.tileSize*Tile.scale, Tile.tileSize*Tile.scale, null);
+		g2.drawImage(image, (int) x * scale, (int) y * scale, tileSize * scale, tileSize * scale, null);
 	}
 }

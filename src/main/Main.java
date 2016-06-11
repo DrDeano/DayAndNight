@@ -19,7 +19,7 @@ public class Main extends JFrame{
 	private static long currentTime, previousTime, deltaTime;
 
 public	InputHandler input;
-	Level level;
+	public Level level;
 	
 	public static void main(String args[]) {
 		Main main = new Main();
