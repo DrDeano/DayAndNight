@@ -1,6 +1,10 @@
 package ahmed;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+
+import javax.swing.JFrame;
 
 import main.Main;
 
@@ -10,8 +14,8 @@ public class Level {
 
 	Main main;
 
-	int[][] objectTiles;
-	int[][] floorTiles;
+	Image objectTiles;
+	Image floorTiles;
 
 	int gridWidth = 0;
 	int gridHeight = 0;
@@ -21,19 +25,13 @@ public class Level {
 	}
 
 	public void init() {
-		loadTiles();
-		loadFloor();
-	}
-
-	private void loadTiles() {
-
+		
 		int[][] mapGridRGB = null;
 
 		try {
 			BufferedImage gridImage = ImageLoader.objects;
 			gridWidth = gridImage.getWidth();
 			gridHeight = gridImage.getHeight();
-			System.out.println(gridWidth + "," + gridHeight);
 			int[] mapArrayRGB = gridImage.getRGB(0, 0, gridWidth, gridHeight, null, 0, gridWidth);
 
 			for (int i = 0; i < mapArrayRGB.length; i++) {
@@ -51,29 +49,59 @@ public class Level {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		System.out.println("Grid loaded");
+		loadTiles(mapGridRGB);
+		loadFloor(mapGridRGB);
+	}
 
-		objectTiles = new int[gridHeight][gridWidth];
+	private void loadTiles(int[][] mapGridRGB) {
+		
+		objectTiles = new JFrame().createImage(gridWidth*16, gridHeight*16);
+		Graphics g = objectTiles.getGraphics();
+		System.out.println("Grid loaded");
 
 		for (int j = 0; j < gridHeight; j++) {
 			for (int i = 0; i < gridWidth; i++) {
-				for (Tile tile : Tile.objectTiles) {
-					if (tile.tileColor == mapGridRGB[j][i]) {
-						// System.out.println(tile.id);
-						objectTiles[j][i] = tile.id;
-						break;
-					} else {
-						System.out.println(tile.tileColor + "," + mapGridRGB[j][i]);
-					}
+				
+				switch(mapGridRGB[j][i]){
+				case 0xFFffaec9:
+					g.drawImage(Tile.sofa.image, i*16, j*16, null);
+					break;
+				case 0xFFed1c24:
+					g.drawImage(Tile.computer.image, i*16, j*16, null);
+					break;
+				case 0xFFB97A57:
+					g.drawImage(Tile.coffee.image, i*16, j*16, null);
+					break;
+				default:
+					break;	
 				}
+				
 			}
 		}
-		System.out.println("Grid loaded2");
 
 	}
 
-	private void loadFloor() {
-//		handler.launcher.gameFrame.frame.createImage(width, height);
+	private void loadFloor(int[][] mapGridRGB) {
+
+		floorTiles = new JFrame().createImage(gridWidth*16, gridHeight*16);
+		Graphics g = floorTiles.getGraphics();
+		for (int j = 0; j < gridHeight; j++) {
+			for (int i = 0; i < gridWidth; i++) {
+				
+				switch(mapGridRGB[j][i]){
+				case 0xFFA349A4:
+					g.drawImage(Tile.sofa.image, i*16, j*16, null);
+					break;
+				case 0xFFFF7F27:
+					g.drawImage(Tile.floor.image, i*16, j*16, null);
+					break;
+				default:
+					break;	
+				}
+				
+			}
+		}
+		
 	}
 
 	public void update() {

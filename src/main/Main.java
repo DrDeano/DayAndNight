@@ -7,7 +7,6 @@ import java.awt.Image;
 
 import javax.swing.JFrame;
 
-import ahmed.Launcher;
 import ahmed.Level;
 
 public class Main extends JFrame{
@@ -58,6 +57,7 @@ public class Main extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(InputHandler.screenSize);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		this.setUndecorated(true);
 		this.setVisible(true);
 		level=new Level(this);
 		level.init();
