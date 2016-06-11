@@ -23,7 +23,6 @@ public class Main extends AbstractMain {
 	}
 
 	public void update() {
-
 	}
 
 	public void draw() {
