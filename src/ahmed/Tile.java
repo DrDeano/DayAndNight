@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 public class Tile {
 	
+	//static int scale = 1;
+	
 	int id=2;
 	BufferedImage image;
 	int tileColor;
@@ -33,9 +35,9 @@ public class Tile {
 		
 	}
 	
-	public void render(Graphics2D g2, int x, int y){
+	public void render(Graphics2D g2, int x, int y, int width, int height){
 //		System.out.println("Drawing: "+id+" at x: "+x+" :y "+y);
-		g2.drawImage(image,x, y, tileSize, tileSize,null);
+		g2.drawImage(image,x, y, width, height,null);
 //		g2.drawImage(ImageLoader.objects, 0, 0, null);
 	}
 	

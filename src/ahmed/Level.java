@@ -1,4 +1,5 @@
 package ahmed;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
@@ -16,13 +17,19 @@ public class Level {
 	int gridWidth = 0;
 	int gridHeight = 0;
 
+	Camera cam;
+
+	Player p;
+
 	public Level(Main main) {
-		this.main=main;
+		this.main = main;
+		cam = new Camera(main, this);
 	}
 
 	public void init() {
 		loadTiles();
 		loadFloor();
+		p = new Player(main, 0, 33.0, 33.0);
 	}
 
 	private void loadTiles() {
@@ -73,34 +80,49 @@ public class Level {
 	}
 
 	private void loadFloor() {
-//		handler.launcher.gameFrame.frame.createImage(width, height);
+		// handler.launcher.gameFrame.frame.createImage(width, height);
 	}
 
 	public void update() {
-
+		p.update();
+		cam.update();
 	}
 
 	public void render(Graphics2D g2) {
-//		renderFloor(g2);
+
+		int a = Tile.tileSize ;
 		for (int j = 0; j < objectTiles.length; j++) {
 			for (int i = 0; i < objectTiles[0].length; i++) {
-				Tile.objectTiles.get(objectTiles[j][i]).render(g2, tileSize * i, tileSize * j);
-				// System.out.print(
-				// Tile.objectTiles.get(objectTiles[j][i]).id);
+
+				Tile.objectTiles.get(objectTiles[j][i]).render(g2, (int) ((i * a)-cam.xOffset),
+						(int) ((j * a)-cam.yOffset), a, a);
+
+//				System.out.println((int) ((i * a) - cam.xOffset) + "," + (int) ((j * a) - cam.yOffset));
+//				System.out.println(j);
+//				System.out.println(j*a);
+//				System.out.println((j*a)-cam.yOffset);
 			}
-			// System.out.println();
 		}
-	}
-	
-	private void renderFloor(Graphics2D g2){
-		for (int j = 0; j < objectTiles.length; j++) {
-			for (int i = 0; i < objectTiles[0].length; i++) {
-//				floorTile.
-				// System.out.print(
-				// Tile.objectTiles.get(objectTiles[j][i]).id);
-			}
-			// System.out.println();
-		}
+		p.render(g2);
 	}
 
+	public Tile getTile(int x, int y) {
+		// we have a 2d array of tile ids, with a given coord we fin the tile
+		// id, and then find the tile based on the id from the Tile.objectTiles
+		// list.
+
+		if (y < 0 || y >= objectTiles.length || x < 0 || x >= objectTiles[0].length) {
+			return null;
+		}
+		return Tile.objectTiles.get(objectTiles[y][x]);
+	}
+
+	public int getLevelWidth() {
+		return gridWidth  * Tile.tileSize;
+	}
+
+	public int getLevelHeight() {
+		return gridHeight  * Tile.tileSize;
+
+	}
 }
