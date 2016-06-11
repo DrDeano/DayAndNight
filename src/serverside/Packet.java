@@ -1,11 +1,15 @@
+package serverside;
+
 import java.io.Serializable;
 import java.util.Date;
+
+import globalClasses.States;
 
 /**
  * Abstract implementation of a Message.
  * @author TauOmicronMu
  */
-public class Message implements Serializable {
+public class Packet implements Serializable {
 
 	/**
 	 * Default serial ID.
@@ -27,19 +31,17 @@ public class Message implements Serializable {
 	 * The command detailing what to do with the data -
 	 * for example, "EndGame".
 	 */
-	protected final MessageType messageType;
+	protected final States messageType;
 	
 	/*
 	 * Holds data specific to the type of message to be sent. 
 	 */
 	protected final Object data;
 	
-	public Message(String sender, MessageType messageType, Object data) {
-		
+	public Packet(String sender, States messageType, Object data) {
 		this.sender = sender;
 		this.messageType = messageType;
 		this.data = data;
-		
 		this.timestamp = new Date();
 	}
 
@@ -55,7 +57,7 @@ public class Message implements Serializable {
 	 * Returns the messageCommand attribute of the Message.
 	 * @return The command detailing what to do with the data.
 	 */
-	public MessageType getMessageCommand() {
+	public States getMessageCommand() {
 		return messageType;
 	}
 
@@ -75,4 +77,3 @@ public class Message implements Serializable {
 		return timestamp;
 	}
 }
-

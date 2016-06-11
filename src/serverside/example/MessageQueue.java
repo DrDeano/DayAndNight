@@ -1,4 +1,4 @@
-package serverside;
+package serverside.example;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,6 @@ public class MessageQueue {
 				System.err.println("Message queue interrupted");
 				System.err.println(e);
 			}
-
 		}
 	}
 

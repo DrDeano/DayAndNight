@@ -1,4 +1,4 @@
-package serverside;
+package serverside.example;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

@@ -1,11 +1,12 @@
-package serverside.example;
+package serverside;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import serverside.example.ServerSender;
 
 /**
  * The main server that listens for clients to connect and create a server
@@ -36,24 +37,24 @@ public class Server {
 		}
 
 		// Create a new client table contain all details about the clients
-		ClientTable clientTable = new ClientTable();
+		ClientTable client_table = new ClientTable();
 
 		// Initialise a server socket
-		ServerSocket serverSocket = null;
+		ServerSocket server_socket = null;
 
 		// Initialise the server port to listen on
-		int serverPort = 0;
+		int server_port = 0;
 
 		// See if the port is a number, if not: exit
 		try {
-			serverPort = Integer.parseInt(args[0]);
+			server_port = Integer.parseInt(args[0]);
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException("Second argument must be an integer");
 		}
 
 		// Check if the server socket can listen on the server port provided
 		try {
-			serverSocket = new ServerSocket(serverPort);
+			server_socket = new ServerSocket(server_port);
 		} catch (IOException e) {
 			System.err.println("Could not listen on port: " + args[0]);
 			System.exit(1);
@@ -64,64 +65,68 @@ public class Server {
 			while (true) {
 				// Wait for a connection
 				// Stuck until somebody connects
-				Socket clientSocet = serverSocket.accept();
+				Socket client_socet = server_socket.accept();
 
 				// Create a new message queue for the client that just connected
-				MessageQueue msgQueue = new MessageQueue();
-
-				// When client connects be able to receive the name of the
-				// client
-				BufferedReader fromClient = new BufferedReader(new InputStreamReader(clientSocet.getInputStream()));
+				PacketQueue packet_queue = new PacketQueue();
 
 				// Be able to write to the client when starting the sender and
 				// receiver thread
-				PrintStream toClient = new PrintStream(clientSocet.getOutputStream());
+				ObjectOutputStream to_client = new ObjectOutputStream(client_socet.getOutputStream());
+				
+				// When client connects be able to receive the name of the
+				// client
+				ObjectInputStream from_client = new ObjectInputStream(client_socet.getInputStream());
 
 				// Read the clients nickname
-				String clientName = fromClient.readLine();
+				String client_name = (String) from_client.readObject();
 
 				// Check if the client connecting is in the client table. If not
 				// then create a new user
-				if (clientTable.getQueue(clientName) == null) { // New user
+				if (client_table.getQueue(client_name) == null) { // New user
 					// Tell to client connection is successful
-					toClient.println("true");
-					toClient.println("Accepted " + clientName);
+					to_client.writeObject(true);
+					to_client.flush();
 
 					// Add the client to the table
-					clientTable.add(clientName, msgQueue);
+					client_table.add(client_name, packet_queue);
 
 					// Change the status of the user to online
-					clientTable.changeStatus(clientName, online);
+					client_table.changeStatus(client_name, online);
 
 					// Create and start a new thread to read from the client
-					(new ServerReceiver(clientName, fromClient, clientTable)).start();
-
+					Thread receiver = new Thread(new ServerReceiver(client_name, from_client, client_table));
+					receiver.start();
+					
 					// Create and start a new thread to write to the client:
-					(new ServerSender(clientTable.getQueue(clientName), toClient)).start();
-
+					Thread sender = new Thread(new ServerSender(client_table.getQueue(client_name), to_client));
+					sender.start();
+					
 					// Check if the name is taken, if is close connection and
 					// don't add
-				} else if (clientTable.getStatus(clientName) == online) {
+				} else if (client_table.getStatus(client_name) == online) {
 					// Tell to client that there name already exists and choose
 					// another
-					toClient.println("false");
+					to_client.writeObject(false);
+					to_client.flush();
 				} else { // Existing user
 					// Tell to client connection is successful
-					toClient.println("true");
-					toClient.println("Accepted " + clientName);
+					to_client.writeObject(true);
+					to_client.flush();
 
 					// Change the status of the user to online
-					clientTable.changeStatus(clientName, online);
+//					client_table.changeStatus(clientName, online);
 
 					// Create and start a new thread to read from the client
-					(new ServerReceiver(clientName, fromClient, clientTable)).start();
+					Thread receiver = new Thread(new ServerReceiver(client_name, from_client, client_table));
+					receiver.start();
 
 					// Create and start a new thread to write to the client:
-					(new ServerSender(clientTable.getQueue(clientName), toClient)).start();
+					(new ServerSender(client_table.getQueue(client_name), to_client)).start();
 				}
 			}
 		} catch (IOException e) {
-			serverSocket.close();
+			server_socket.close();
 			System.err.println(e);
 		}
 	}
