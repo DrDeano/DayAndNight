@@ -5,7 +5,7 @@ import java.awt.Image;
 
 import javax.swing.JFrame;
 
-public class Main extends JFrame implements Runnable{
+public class Main extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 	private static boolean running;
@@ -21,18 +21,18 @@ public class Main extends JFrame implements Runnable{
 	public void run() {
 		initialise();
 		float deltas;
-		long minute = 0;
+		long minute = previousTime;
 		int loops = 0;
+		long time = previousTime + 1000000000l;
 		while (running) {
-			do{
 				currentTime  = System.nanoTime();
 				deltaTime = currentTime - previousTime;
 				deltas = ((float)deltaTime/1000000000f);
-			}while(deltas < SPF);
 			minute+=deltaTime;
 			loops++;
-			if(minute>=1000000000){
+			if(minute>=time){
 				System.out.println(loops);
+				time += 1000000000l;
 				loops = 0;
 			}
 			update(deltas);
@@ -45,10 +45,11 @@ public class Main extends JFrame implements Runnable{
 		running = true;
 		previousTime = System.nanoTime();
 		FPS = this.getGraphicsConfiguration().getDevice().getDisplayMode().getRefreshRate();
-		SPF = 1000000000f/FPS;
+		SPF = 1f/FPS;
 		this.setTitle("Day And Night");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(InputHandler.screenSize);
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setVisible(true);
 	}
 
