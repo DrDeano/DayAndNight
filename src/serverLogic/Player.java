@@ -31,6 +31,9 @@ public class Player {
 		y = newPosition.getPosition().getY();
 		angle = newPosition.getAngle();
 	}
+	public void changeStat(Stat stat, double value) {
+		stats.increase(stat, value);
+	}
 
 
 	public Pos getPosition() {

@@ -27,7 +27,7 @@ public class Stats {
 	}
 
 	public boolean finished() {
-		return players.stream().anyMatch(p -> p.getStats().progress >= 100);
+		return players.stream().anyMatch(p -> p.getStats().isFinished());
 	}
 
 	public void update(double delta) {
