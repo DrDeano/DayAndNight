@@ -36,6 +36,18 @@ public class StatContainer {
 
 	}
 
+
+	public double get(Stat stat) {
+		return table.get(stat);
+	}
+	public double getPercentageProduct(Stat... stats) {
+		double res = 1;
+		for (int i = 0; i < stats.length; i++) {
+			res *= table.get(stats[i]) / maxValue;
+		}
+		return res;
+	}
+
 	public boolean isFinished() {
 		return table.get(Stat.PROGRESS) >= 100;
 	}
