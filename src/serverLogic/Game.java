@@ -15,6 +15,13 @@ public class Game {
 	private Stats stats;
 	private ArrayList<Interactable> machines;
 
+	/** Creates a new game and starts the internal clock. */
+	public Game() {
+		new Clock();
+		stats = new Stats();
+		machines = new ArrayList<Interactable>();
+	}
+
 	/** Update the position of a single player
 	 * 
 	 * @param playerId Id of the player
@@ -93,6 +100,13 @@ public class Game {
 	 * @return Stats for a player. Empty Optional if player doesn't exist. */
 	public Optional<StatContainer> getStats(String id) {
 		return stats.getPlayer(id).map(p -> p.getStats());
+	}
+
+	/** Add a new player
+	 * 
+	 * @param id Id of the new player */
+	public void newPlayer(String id) {
+		stats.addPlayer(id);
 	}
 
 
