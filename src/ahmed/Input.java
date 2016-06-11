@@ -1,4 +1,4 @@
-package ahmed;
+	package ahmed;
 
 import java.awt.Component;
 import java.awt.event.KeyEvent;
