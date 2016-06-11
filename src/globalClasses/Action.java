@@ -2,5 +2,5 @@ package globalClasses;
 
 
 public enum Action {
-	NONE, USE, SABOTAGE, CANCEL;
+	NONE, USE, SABOTAGE, FINISH, CANCEL;
 }
