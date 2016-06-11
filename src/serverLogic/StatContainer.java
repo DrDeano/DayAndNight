@@ -16,23 +16,37 @@ public class StatContainer {
 		super();
 		table = new HashMap<Stat, Double>();
 		table.put(Stat.PROGRESS, 0.0);
-		table.put(Stat.COFFEE, 0.0);
-		table.put(Stat.FUN, 0.0);
-		table.put(Stat.SANITY, 0.0);
+		table.put(Stat.COFFEE, startingValue);
+		table.put(Stat.FUN, startingValue);
+		table.put(Stat.SANITY, startingValue);
 	}
 
 	public void changeAll(double value) {
 		for (Entry<Stat, Double> entry : table.entrySet()) {
 			entry.setValue(entry.getValue() + value);
 		}
+		correctAllStats();
 	}
 
 	public void increase(Stat stat, double value) {
 		table.put(stat, value);
+		correctStat(stat);
+
 	}
 
 	public boolean isFinished() {
 		return table.get(Stat.PROGRESS) >= 100;
+	}
+
+	private void correctAllStats() {
+		for (Entry<Stat, Double> entry : table.entrySet()) {
+			if (entry.getValue() < minValue) entry.setValue(minValue);
+			else if (entry.getValue() > maxValue) entry.setValue(maxValue);
+		}
+	}
+	private void correctStat(Stat stat) {
+		if (table.get(stat) < minValue) table.put(stat, minValue);
+		else if (table.get(stat) > maxValue) table.put(stat, maxValue);
 	}
 
 
