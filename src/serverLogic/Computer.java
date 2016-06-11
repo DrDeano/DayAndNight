@@ -18,6 +18,18 @@ public class Computer extends Interactable {
 		this.owner = owner;
 	}
 
+
+	public Computer(double sabotageTime, double sabotageAmount) {
+		super();
+		this.sabotageTime = sabotageTime;
+		this.sabotageAmount = sabotageAmount;
+	}
+
+
+	public void assignOwner(Player player) {
+		this.owner = owner;
+	}
+
 	@Override
 	public double startUsing(Player player) {
 		if (player.equals(owner)) {
