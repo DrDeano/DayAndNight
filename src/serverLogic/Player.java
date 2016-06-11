@@ -5,9 +5,10 @@ public class Player {
 
 	private int x;
 	private int y;
+	private int angle;
 	private int id;
 	private StatContainer stats;
-	private double moveTimeLeft = 0;
+	private Action currentAction;
 
 
 	public Player(int id) {
@@ -16,6 +17,24 @@ public class Player {
 		this.y = 0;
 		this.id = id;
 		this.stats = new StatContainer();
+	}
+
+	public void setAction(Action action) {
+		currentAction = action;
+	}
+
+
+	public int getX() {
+		return x;
+	}
+	public int getY() {
+		return y;
+	}
+	public int getId() {
+		return id;
+	}
+	public StatContainer getStats() {
+		return stats;
 	}
 
 
@@ -42,25 +61,5 @@ public class Player {
 			angle -= 360;
 		return angle;
 	}
-
-
-
-	public int getX() {
-		return x;
-	}
-	public int getY() {
-		return y;
-	}
-	public int getId() {
-		return id;
-	}
-	public StatContainer getStats() {
-		return stats;
-	}
-	public boolean isMoving() {
-		return moveTimeLeft > 0;
-	}
-
-
 
 }
