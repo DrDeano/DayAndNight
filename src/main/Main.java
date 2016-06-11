@@ -18,8 +18,8 @@ public class Main extends JFrame{
 	private static float SPF;
 	private static long currentTime, previousTime, deltaTime;
 
-	
-	Level level;
+public	InputHandler input;
+	public Level level;
 	
 	public static void main(String args[]) {
 		Main main = new Main();
@@ -51,6 +51,7 @@ public class Main extends JFrame{
 
 	public void initialise() {
 		running = true;
+		input = new InputHandler(this);
 		previousTime = System.nanoTime();
 		FPS = this.getGraphicsConfiguration().getDevice().getDisplayMode().getRefreshRate();
 		SPF = 1f/FPS;
