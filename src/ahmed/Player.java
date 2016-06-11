@@ -1,6 +1,7 @@
 package ahmed;
 
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
@@ -9,17 +10,32 @@ import main.InputHandler;
 import main.Main;
 
 public class Player {
-
+	InputHandler input;
 	BufferedImage image;
 	Pos pos;
 	int id;
 	Main main;
 
+	double sanity = 1;
+	double caffeine = 1;
+	double fun = 1;
+	double progress = 0;
+
+	double x;
+	double y;
+
+	static final double baseSpeed = 5;
+
+	double moveSpeed = baseSpeed;
+
 	public Player(Main main, int id, double x, double y) {
 		this.id = id;
 		this.main = main;
 		pos = new Pos(new Point2D.Double(x, y), 0);
+		this.x = x;
+		this.y = y;
 		getSprite();
+		input = main.input;
 	}
 
 	private void getSprite() {
@@ -46,12 +62,31 @@ public class Player {
 			throw new RuntimeException("id cannot be greater than 5");
 		}
 	}
-	
-	public void update(){
-//		if(i.isKeyDown(keyCode)
+
+	public void update() {
+		boolean left = input.isKeyDown(KeyEvent.VK_LEFT);
+		boolean right = input.isKeyDown(KeyEvent.VK_LEFT);
+		boolean up = input.isKeyDown(KeyEvent.VK_LEFT);
+		boolean down = input.isKeyDown(KeyEvent.VK_LEFT);
+
+		moveSpeed = sanity * baseSpeed;
+
+		if (left) {
+			x -= moveSpeed;
+		} else if (right) {
+			x += moveSpeed;
+		}
+		
+		if (up) {
+			y -= moveSpeed;
+		} else if (down) {
+			y += moveSpeed;
+		}
+		
 	}
 
 	public void render(Graphics2D g2) {
-
+		int scale = Tile.scale;
+		g2.drawImage(image,(int)x*scale, (int)y*scale, Tile.tileSize*Tile.scale, Tile.tileSize*Tile.scale, null);
 	}
 }

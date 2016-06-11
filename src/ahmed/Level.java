@@ -16,6 +16,7 @@ public class Level {
 	int gridWidth = 0;
 	int gridHeight = 0;
 
+	Player p ;
 	public Level(Main main) {
 		this.main=main;
 	}
@@ -23,6 +24,7 @@ public class Level {
 	public void init() {
 		loadTiles();
 		loadFloor();
+		p= new Player(main, 0,0,0);
 	}
 
 	private void loadTiles() {
@@ -77,7 +79,7 @@ public class Level {
 	}
 
 	public void update() {
-
+		p.update();
 	}
 
 	public void render(Graphics2D g2) {
@@ -90,6 +92,7 @@ public class Level {
 			}
 			// System.out.println();
 		}
+		p.render(g2);
 	}
 	
 	private void renderFloor(Graphics2D g2){
@@ -101,6 +104,7 @@ public class Level {
 			}
 			// System.out.println();
 		}
+		
 	}
 
 }
