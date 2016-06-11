@@ -14,7 +14,12 @@ public class StatContainer {
 		this.rest = 50;
 	}
 	
-	
+	public void changeAll(double amount){
+		progress+=amount;
+		coffee+=amount;
+		fun+=amount;
+		rest+=amount;
+	}
 	
 	
 }

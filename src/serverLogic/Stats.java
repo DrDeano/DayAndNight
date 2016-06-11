@@ -5,21 +5,32 @@ import java.util.stream.Stream;
 
 public class Stats {
 
-	ArrayList<StatContainer> stats;
+	private static final double dayDecay = 0.05; // Decay per second
+	private static final double nightDecay = 0.15;
 
-	public Stats(int players) {
+	ArrayList<Player> players;
+
+
+	public Stats(int amountOfPlayers) {
 		super();
-		this.stats = new ArrayList<StatContainer>();
-		for (int i = 0; i < players; i++) {
-			stats.add(new StatContainer());
+		this.players = new ArrayList<Player>();
+		for (int i = 0; i < amountOfPlayers; i++) {
+			players.add(new Player(i));
 		}
 	}
-	
-	public boolean finished(){
-		return stats.stream().anyMatch(s -> s.progress>=100);
+
+	public boolean finished() {
+		return players.stream().anyMatch(p -> p.getStats().progress >= 100);
 	}
-	
-	
-	
-	
+
+	public void update(double delta) {
+		players.forEach(p -> p.getStats().changeAll(delta * (isDay() ? dayDecay : nightDecay)));
+	}
+
+	private boolean isDay() {
+		// TODO
+		return true;
+	}
+
+
 }
