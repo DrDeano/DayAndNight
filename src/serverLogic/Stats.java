@@ -19,6 +19,13 @@ public class Stats {
 		}
 	}
 
+	public Stats() {
+		this.players = new ArrayList<Player>();
+	}
+	public void addPlayer(String id) {
+		players.add(new Player(id));
+	}
+
 	public boolean finished() {
 		return players.stream().anyMatch(p -> p.getStats().progress >= 100);
 	}

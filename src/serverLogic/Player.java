@@ -1,5 +1,7 @@
 package serverLogic;
 
+import java.awt.geom.Point2D;
+
 import globalClasses.Pos;
 
 public class Player {
@@ -30,6 +32,10 @@ public class Player {
 		angle = newPosition.getAngle();
 	}
 
+
+	public Pos getPosition() {
+		return new Pos(new Point2D.Double(x, y), (int) angle);
+	}
 
 	public double getX() {
 		return x;
