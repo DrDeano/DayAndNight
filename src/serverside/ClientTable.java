@@ -1,5 +1,6 @@
 package serverside;
 
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -66,5 +67,9 @@ public class ClientTable {
 	
 	public synchronized boolean getStatus(String name) {
 		return getQueue(name).getStatus();
+	}
+	
+	public synchronized Set<String> getNames() {
+		return queueTable.keySet();
 	}
 }

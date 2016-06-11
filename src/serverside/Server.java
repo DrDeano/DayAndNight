@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import serverside.example.ServerSender;
+import serverLogic.Stats;
 
 /**
  * The main server that listens for clients to connect and create a server
@@ -28,9 +28,6 @@ public class Server {
 	 *             Must only have one argument and is must be a number
 	 */
 	public static void main(String[] args) throws IOException, IllegalArgumentException {
-		// The online status code
-		boolean online = true;
-
 		// Checks the number of arguments, if not one the throw exception
 		if (args.length != 1) {
 			throw new IllegalArgumentException("Usage: java Server portNumber");
@@ -41,6 +38,8 @@ public class Server {
 
 		// Initialise a server socket
 		ServerSocket server_socket = null;
+
+		Stats main_logic = new Stats();
 
 		// Initialise the server port to listen on
 		int server_port = 0;
@@ -73,13 +72,18 @@ public class Server {
 				// Be able to write to the client when starting the sender and
 				// receiver thread
 				ObjectOutputStream to_client = new ObjectOutputStream(client_socet.getOutputStream());
-				
+
 				// When client connects be able to receive the name of the
 				// client
 				ObjectInputStream from_client = new ObjectInputStream(client_socet.getInputStream());
 
 				// Read the clients nickname
-				String client_name = (String) from_client.readObject();
+				String client_name = "";
+				try {
+					client_name = (String) from_client.readObject();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
 
 				// Check if the client connecting is in the client table. If not
 				// then create a new user
@@ -88,41 +92,24 @@ public class Server {
 					to_client.writeObject(true);
 					to_client.flush();
 
+					main_logic.addPlayer(client_name);
+
 					// Add the client to the table
 					client_table.add(client_name, packet_queue);
 
-					// Change the status of the user to online
-					client_table.changeStatus(client_name, online);
-
 					// Create and start a new thread to read from the client
-					Thread receiver = new Thread(new ServerReceiver(client_name, from_client, client_table));
+					Thread receiver = new Thread(new ServerReceiver(client_name, from_client, client_table, main_logic));
 					receiver.start();
-					
+
 					// Create and start a new thread to write to the client:
 					Thread sender = new Thread(new ServerSender(client_table.getQueue(client_name), to_client));
 					sender.start();
-					
-					// Check if the name is taken, if is close connection and
-					// don't add
-				} else if (client_table.getStatus(client_name) == online) {
+
+				} else {
 					// Tell to client that there name already exists and choose
 					// another
 					to_client.writeObject(false);
 					to_client.flush();
-				} else { // Existing user
-					// Tell to client connection is successful
-					to_client.writeObject(true);
-					to_client.flush();
-
-					// Change the status of the user to online
-//					client_table.changeStatus(clientName, online);
-
-					// Create and start a new thread to read from the client
-					Thread receiver = new Thread(new ServerReceiver(client_name, from_client, client_table));
-					receiver.start();
-
-					// Create and start a new thread to write to the client:
-					(new ServerSender(client_table.getQueue(client_name), to_client)).start();
 				}
 			}
 		} catch (IOException e) {
