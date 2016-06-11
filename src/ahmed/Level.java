@@ -14,7 +14,8 @@ public class Level {
 
 	Main main;
 
-	Image objectTiles;
+	Image objects;
+	int[][] objectTiles;
 	Image floorTiles;
 
 	int gridWidth = 0;
@@ -57,8 +58,8 @@ public class Level {
 
 	private void loadTiles(int[][] mapGridRGB) {
 		
-		objectTiles = new JFrame().createImage(gridWidth*16, gridHeight*16);
-		Graphics g = objectTiles.getGraphics();
+		objects = new JFrame().createImage(gridWidth*16, gridHeight*16);
+		Graphics g = objects.getGraphics();
 		System.out.println("Grid loaded");
 
 		for (int j = 0; j < gridHeight; j++) {
@@ -67,12 +68,15 @@ public class Level {
 				switch(mapGridRGB[j][i]){
 				case 0xFFffaec9:
 					g.drawImage(Tile.sofa.image, i*16, j*16, null);
+					objectTiles[i][j] = Tile.sofa.id;
 					break;
 				case 0xFFed1c24:
 					g.drawImage(Tile.computer.image, i*16, j*16, null);
+					objectTiles[i][j] = Tile.computer.id;
 					break;
 				case 0xFFB97A57:
 					g.drawImage(Tile.coffee.image, i*16, j*16, null);
+					objectTiles[i][j] = Tile.coffee.id;
 					break;
 				default:
 					break;	
@@ -110,29 +114,8 @@ public class Level {
 		p.update();
 	}
 
-	public void render(Graphics2D g2) {
-		// renderFloor(g2);
-//		for (int j = 0; j < objectTiles.length; j++) {
-//			for (int i = 0; i < objectTiles[0].length; i++) {
-//				Tile.objectTiles.get(objectTiles[j][i]).render(g2, tileSize * i, tileSize * j);
-//				// System.out.print(
-//				// Tile.objectTiles.get(objectTiles[j][i]).id);
-//			}
-//			// System.out.println();
-//		}
-//		p.render(g2);
-	}
-
-	private void renderFloor(Graphics2D g2) {
-//		for (int j = 0; j < objectTiles.length; j++) {
-//			for (int i = 0; i < objectTiles[0].length; i++) {
-//				// floorTile.
-//				// System.out.print(
-//				// Tile.objectTiles.get(objectTiles[j][i]).id);
-//			}
-//			// System.out.println();
-//		}
-
+	public void draw(Graphics2D g2) {
+		g2.drawImage(objects, 0,0, null);
 	}
 
 	public Tile getTile(int x, int y) {
