@@ -12,7 +12,7 @@ public abstract class Interactable {
 		return getDistance(player) <= interactionDistance;
 	}
 
-	private double getDistance(Player player) {
+	public double getDistance(Player player) {
 		return Math.sqrt(Math.pow((rectangle.getCenterX() - player.getX()), 2) + Math.pow((rectangle.getCenterY() - player.getY()), 2));
 		// TODO Get distance from rectangle and not from the point
 	}

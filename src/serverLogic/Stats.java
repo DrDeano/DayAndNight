@@ -2,6 +2,7 @@ package serverLogic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class Stats {
@@ -43,6 +44,9 @@ public class Stats {
 
 	public HashMap<String, Player> getPlayers() {
 		return players;
+	}
+	public Optional<Player> getPlayer(String id) {
+		return Optional.ofNullable(players.get(id));
 	}
 
 
