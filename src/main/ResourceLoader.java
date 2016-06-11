@@ -36,7 +36,7 @@ public class ResourceLoader {
 	
 	public static BufferedImage getBufferedImage(String path) {
 		try {
-			return ImageIO.read(ResourceLoader.class.getResource("resources/" + path));
+			return ImageIO.read(ResourceLoader.class.getResource("/resources/" + path));
 		} catch (IOException e) {
 			System.out.println("failed to load");
 			e.printStackTrace();

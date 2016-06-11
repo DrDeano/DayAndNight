@@ -3,7 +3,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import main.Main;
-import utils.ResourceLoader;
 
 public class Level {
 

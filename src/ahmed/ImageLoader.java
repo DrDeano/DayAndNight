@@ -1,10 +1,8 @@
 package ahmed;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
+import main.ResourceLoader;
 
-import utils.ResourceLoader;
 
 public class ImageLoader {
 	
