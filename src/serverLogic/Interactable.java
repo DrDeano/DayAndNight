@@ -6,6 +6,7 @@ public abstract class Interactable {
 
 	Rectangle2D rectangle;
 	public static final double interactionDistance = 1;
+	protected boolean sabotaged;
 
 	public boolean canReach(Player player) {
 		return getDistance(player) <= interactionDistance;

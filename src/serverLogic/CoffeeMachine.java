@@ -8,15 +8,13 @@ public class CoffeeMachine extends Interactable {
 	private double coffeeRestored;
 	private double coffeeRestoredWhenSabotaged;
 
-	private boolean sabotaged;
-
 	public CoffeeMachine(double useTime, double sabotageTime, double coffeeRestored, double coffeeRestoredWhenSabotaged) {
 		super();
 		this.useTime = useTime;
 		this.sabotageTime = sabotageTime;
 		this.coffeeRestored = coffeeRestored;
 		this.coffeeRestoredWhenSabotaged = coffeeRestoredWhenSabotaged;
-		this.sabotaged = false;
+		super.sabotaged = false;
 	}
 
 	@Override
