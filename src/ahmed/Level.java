@@ -20,12 +20,14 @@ public class Level {
 	int gridWidth = 0;
 	int gridHeight = 0;
 
+	Player p;
+
 	public Level(Main main) {
-		this.main=main;
+		this.main = main;
 	}
 
 	public void init() {
-		
+
 		int[][] mapGridRGB = null;
 
 		try {
@@ -105,30 +107,40 @@ public class Level {
 	}
 
 	public void update() {
-
+		p.update();
 	}
 
 	public void render(Graphics2D g2) {
-//		renderFloor(g2);
-		for (int j = 0; j < objectTiles.length; j++) {
-			for (int i = 0; i < objectTiles[0].length; i++) {
-				Tile.objectTiles.get(objectTiles[j][i]).render(g2, tileSize * i, tileSize * j);
-				// System.out.print(
-				// Tile.objectTiles.get(objectTiles[j][i]).id);
-			}
-			// System.out.println();
-		}
+		// renderFloor(g2);
+//		for (int j = 0; j < objectTiles.length; j++) {
+//			for (int i = 0; i < objectTiles[0].length; i++) {
+//				Tile.objectTiles.get(objectTiles[j][i]).render(g2, tileSize * i, tileSize * j);
+//				// System.out.print(
+//				// Tile.objectTiles.get(objectTiles[j][i]).id);
+//			}
+//			// System.out.println();
+//		}
+//		p.render(g2);
 	}
-	
-	private void renderFloor(Graphics2D g2){
-		for (int j = 0; j < objectTiles.length; j++) {
-			for (int i = 0; i < objectTiles[0].length; i++) {
-//				floorTile.
-				// System.out.print(
-				// Tile.objectTiles.get(objectTiles[j][i]).id);
-			}
-			// System.out.println();
-		}
+
+	private void renderFloor(Graphics2D g2) {
+//		for (int j = 0; j < objectTiles.length; j++) {
+//			for (int i = 0; i < objectTiles[0].length; i++) {
+//				// floorTile.
+//				// System.out.print(
+//				// Tile.objectTiles.get(objectTiles[j][i]).id);
+//			}
+//			// System.out.println();
+//		}
+
+	}
+
+	public Tile getTile(int x, int y) {
+		// we have a 2d array of tile ids, with a given coord we fin the tile
+		// id, and then find the tile based on the id from the Tile.objectTiles
+		// list.
+//		return Tile.objectTiles.get(objectTiles[y][x]);
+		return null;
 	}
 
 }
