@@ -17,42 +17,54 @@ public class ServerSender implements Runnable {
 
 	@Override
 	public void run() {
-		try {
-			while (true) {
-				Packet packet = queue.take();
+		while (true) {
+			Packet packet = queue.take();
+			
+			States state = packet.getMessageCommand();
+			
+			switch (state) {
+			case PROGRESS:
+				write_to_client(packet);
+				break;
+
+			case POSITION:
+				write_to_client(packet);
+				break;
+
+			case COMPUTER:
+				write_to_client(packet);
+				break;
+
+			case COFFIE_MAKER:
+				write_to_client(packet);
+				break;
+
+			case SOFA:
+				write_to_client(packet);
+				break;
+
+			case POOL_TABLE:
+				write_to_client(packet);
+				break;
 				
-				States state = packet.getMessageCommand();
-				
-				switch (state) {
-				case PROGRESS:
-					
-					break;
-
-				case POSITION:
-					to_client.writeObject(packet);
-					to_client.flush();
-					break;
-
-				case S_COMPUTER:
-
-					break;
-
-				case S_COFFIE_MAKER:
-
-					break;
-
-				case S_SOFA:
-
-					break;
-					
-				case S_POOL_TABLE:
-
-					break;
-
-				default:
-					break;
+			case DISCONNECT:
+				try {
+					to_client.close();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+				break;
+
+			default:
+				break;
 			}
+		}
+	}
+	
+	private void write_to_client(Object obj) {
+		try {
+			to_client.writeObject(obj);
+			to_client.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
