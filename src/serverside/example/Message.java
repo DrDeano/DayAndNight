@@ -1,4 +1,4 @@
-package serverside;
+package serverside.example;
 
 /**
  * A class used to store a message to be received by a client. Also contains a
