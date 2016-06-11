@@ -1,17 +1,18 @@
 package serverLogic;
 
+import globalClasses.Pos;
 
 public class Player {
 
-	private int x;
-	private int y;
-	private int angle;
-	private int id;
+	private double x;
+	private double y;
+	private double angle;
+	private String id;
 	private StatContainer stats;
 	private Action currentAction;
 
 
-	public Player(int id) {
+	public Player(String id) {
 		super();
 		this.x = 0; // TODO set starting positions
 		this.y = 0;
@@ -23,14 +24,20 @@ public class Player {
 		currentAction = action;
 	}
 
+	public void updatePosition(Pos newPosition) {
+		x = newPosition.getPosition().getX();
+		y = newPosition.getPosition().getY();
+		angle = newPosition.getAngle();
+	}
 
-	public int getX() {
+
+	public double getX() {
 		return x;
 	}
-	public int getY() {
+	public double getY() {
 		return y;
 	}
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 	public StatContainer getStats() {

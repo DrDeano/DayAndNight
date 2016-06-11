@@ -11,11 +11,11 @@ public class Stats {
 	ArrayList<Player> players;
 
 
-	public Stats(int amountOfPlayers) {
+	public Stats(String[] ids) {
 		super();
 		this.players = new ArrayList<Player>();
-		for (int i = 0; i < amountOfPlayers; i++) {
-			players.add(new Player(i));
+		for (int i = 0; i < ids.length; i++) {
+			players.add(new Player(ids[i]));
 		}
 	}
 
@@ -31,6 +31,12 @@ public class Stats {
 		// TODO
 		return true;
 	}
+
+
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+
 
 
 }
