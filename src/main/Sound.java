@@ -12,7 +12,7 @@ public class Sound {
 	public static final Sound slurp = new Sound("slurping.wav");
 	public static final Sound type = new Sound("typing.wav");
 	
-	Clip clip;
+	private Clip clip;
 
 	public Sound(String filePath) {
 		try {
