@@ -15,7 +15,8 @@ public class Player {
 	Pos pos;
 	int id;
 	Main main;
-
+Level level;
+Camera cam;
 	double sanity = 1;
 	double caffeine = 1;
 	double fun = 1;
@@ -24,10 +25,9 @@ public class Player {
 	double x;
 	double y;
 
-	int scale = Tile.scale;
 	int tileSize = Tile.tileSize;
 
-	static final double baseSpeed = 5;
+	static final double baseSpeed = 2;
 
 	double moveSpeed = baseSpeed;
 
@@ -39,6 +39,8 @@ public class Player {
 		this.y = y;
 		getSprite();
 		input = main.input;
+		level = main.level;
+		cam = level.cam;
 	}
 
 	private void getSprite() {
@@ -68,46 +70,47 @@ public class Player {
 
 	public void update() {
 		boolean left = input.isKeyDown(KeyEvent.VK_LEFT);
-		boolean right = input.isKeyDown(KeyEvent.VK_LEFT);
-		boolean up = input.isKeyDown(KeyEvent.VK_LEFT);
-		boolean down = input.isKeyDown(KeyEvent.VK_LEFT);
+		boolean right = input.isKeyDown(KeyEvent.VK_RIGHT);
+		boolean up = input.isKeyDown(KeyEvent.VK_UP);
+		boolean down = input.isKeyDown(KeyEvent.VK_DOWN);
 
 		moveSpeed = sanity * baseSpeed;
 
 		double targetX = x;
 		double targetY = y;
 
-		if (left) {
-			targetX -= moveSpeed;
-			
-		} else if (right) {
-			targetX += moveSpeed;
-		}
-
 		if (up) {
 			targetY -= moveSpeed;
 		} else if (down) {
 			targetY += moveSpeed;
+		} else if (left) {
+			targetX -= moveSpeed;
+		} else if (right) {
+			targetX += moveSpeed;
 		}
 
-		if(!main.level.getTile(x/scale, y/scale).isSolid){
+		Tile nextTile = main.level.getTile((int) targetX/Tile.tileSize , (int) targetY/Tile.tileSize);
+//		nextTile = null;
+		if (nextTile == null) {
+			updateX(targetX);
+			updateY(targetY);
+		} else if (!nextTile.solid) {
 			updateX(targetX);
 			updateY(targetY);
 		}
-		
 	}
-	
-	public void updateX(double targetX){
-		x=targetX;
+
+	public void updateX(double targetX) {
+		x = targetX;
 		// todo: send new x to Server
 	}
-	
-	public void updateY(double targetY){
-		y=targetY;
+
+	public void updateY(double targetY) {
+		y = targetY;
 		// todo: send new y to Server
 	}
 
 	public void render(Graphics2D g2) {
-		g2.drawImage(image, (int) x * scale, (int) y * scale, tileSize * scale, tileSize * scale, null);
+		g2.drawImage(image, (int) ((x )-cam.xOffset), (int)(( y )-cam.yOffset), tileSize , tileSize , null);
 	}
 }
