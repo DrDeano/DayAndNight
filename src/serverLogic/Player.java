@@ -1,7 +1,9 @@
 package serverLogic;
 
 import java.awt.geom.Point2D;
+import java.util.Optional;
 
+import globalClasses.Action;
 import globalClasses.Pos;
 import globalClasses.StatContainer;
 
@@ -12,7 +14,8 @@ public class Player {
 	private double angle;
 	private String id;
 	private StatContainer stats;
-	private Action currentAction;
+
+	private Interactable interactingWith = null;
 
 
 	public Player(String id) {
@@ -21,10 +24,6 @@ public class Player {
 		this.y = 0;
 		this.id = id;
 		this.stats = new StatContainer();
-	}
-
-	public void setAction(Action action) {
-		currentAction = action;
 	}
 
 	public void updatePosition(Pos newPosition) {
@@ -52,6 +51,12 @@ public class Player {
 	}
 	public StatContainer getStats() {
 		return stats;
+	}
+	public void setMachine(Interactable machine) {
+		this.interactingWith = machine;
+	}
+	public Optional<Interactable> getMachine() {
+		return Optional.ofNullable(interactingWith);
 	}
 	public double getSpeed() {
 		Stat[] arguments = {Stat.COFFEE, Stat.FUN, Stat.SANITY};
