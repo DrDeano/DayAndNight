@@ -35,7 +35,7 @@ public class Computer extends Machine {
 			playerWorking = true;
 			(new Thread(() -> processWork())).start();
 			return Double.POSITIVE_INFINITY;
-		} else return 0;
+		} else return -1;
 
 	}
 
