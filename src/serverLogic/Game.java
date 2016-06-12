@@ -16,6 +16,7 @@ import globalClasses.StatContainer;
 import globalClasses.States;
 import serverNetworking.Packet;
 import serverNetworking.Server;
+import serverNetworking.ServerLobby;
 
 public class Game {
 
@@ -170,7 +171,7 @@ public class Game {
 			while (true) {
 				if (!nightStarted && Clock.getTime() > config.getDayTime()) {
 					nightStarted = true;
-					players.values().forEach(p -> Server.sendToClient(p.getId(), new Packet("Server", States.NIHGT_STARTED, null)));
+					players.values().forEach(p -> lobby.sendToClient(p.getId(), new Packet("Server", States.NIHGT_STARTED, null)));
 				}
 				rooms.forEach(r -> r.update(players.values()));
 				double decay = nightStarted ? config.getDayDecay() : config.getNightDecay();
@@ -190,7 +191,7 @@ public class Game {
 				}
 			}
 			final Player winnerF = winner;
-			players.values().forEach(p -> Server.sendToClient(p.getId(), new Packet("Server", States.GAME_ENDED, p.equals(winnerF))));
+			players.values().forEach(p -> lobby.sendToClient(p.getId(), new Packet("Server", States.GAME_ENDED, p.equals(winnerF))));
 		} catch (InterruptedException ex) {
 			System.err.println("Main game loop interrupted with " + ex);
 		}
