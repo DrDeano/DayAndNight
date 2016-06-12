@@ -9,15 +9,17 @@ import javax.sound.sampled.LineUnavailableException;
 
 public class Sound {
 	
+	public static final Sound dayNNight = new Sound("DayNNite-003.wav");
 	public static final Sound slurp = new Sound("slurping.wav");
 	public static final Sound type = new Sound("typing.wav");
 	
 	private Clip clip;
+	private AudioInputStream sound;
 
 	public Sound(String filePath) {
 		try {
 			clip = AudioSystem.getClip();
-			AudioInputStream sound = ResourceLoader.getSound(filePath);
+			sound = ResourceLoader.getSound(filePath);
 			clip.open(sound);
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
