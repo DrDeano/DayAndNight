@@ -12,6 +12,9 @@ import globalClasses.Action;
 import globalClasses.ActionResponse;
 import globalClasses.Pos;
 import globalClasses.StatContainer;
+import globalClasses.States;
+import serverNetworking.Packet;
+import serverNetworking.Server;
 
 public class Game {
 
@@ -153,14 +156,31 @@ public class Game {
 
 	private void mainLoop() {
 		try {
+			// Running the game
 			while (true) {
-				if (Clock.getTime() > config.getDayTime()) nightStarted = true;
+				if (!nightStarted && Clock.getTime() > config.getDayTime()) {
+					nightStarted = true;
+					players.values().forEach(p -> Server.sendToClient(p.getId(), new Packet("Server", States.NIHGT_STARTED, null)));
+				}
 				rooms.forEach(r -> r.update(players.values()));
 				double decay = nightStarted ? config.getDayDecay() : config.getNightDecay();
 				players.values().forEach(p -> p.getStats().decay(decay * 0.05));
-				if (players.values().stream().anyMatch(p -> p.getStats().isFinished())) break; // TODO Actual game ending condition
+				if (players.values().stream().anyMatch(p -> p.getStats().isFinished())
+					|| Clock.getTime() > config.getDayTime() + config.getNightTime()) break;
 				Thread.sleep(50);
 			}
+
+			// Handle game ending
+			double maxProgress = -1;
+			Player winner = null;
+			for (Player player : players.values()) {
+				if (player.getStats().get(Stat.PROGRESS) > maxProgress) {
+					maxProgress = player.getStats().get(Stat.PROGRESS);
+					winner = player;
+				}
+			}
+			final Player winnerF = winner;
+			players.values().forEach(p -> Server.sendToClient(p.getId(), new Packet("Server", States.GAME_ENDED, p.equals(winnerF))));
 		} catch (InterruptedException ex) {
 			System.err.println("Main game loop interrupted with " + ex);
 		}
