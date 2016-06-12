@@ -3,7 +3,10 @@ package serverLogic;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
+
+import globalClasses.StatContainer;
 
 public class Stats {
 
@@ -13,19 +16,19 @@ public class Stats {
 	HashMap<String, Player> players;
 
 
-	public Stats(String[] ids) {
+	public Stats(String[] ids, Function<StatContainer, Double> speedFunction) {
 		super();
 		this.players = new HashMap<String, Player>();
 		for (int i = 0; i < ids.length; i++) {
-			players.put(ids[i], new Player(ids[i]));
+			players.put(ids[i], new Player(ids[i], speedFunction));
 		}
 	}
 
 	public Stats() {
 		this.players = new HashMap<String, Player>();
 	}
-	public void addPlayer(String id) {
-		players.put(id, new Player(id));
+	public void addPlayer(String id, Function<StatContainer, Double> speedFunction) {
+		players.put(id, new Player(id, speedFunction));
 	}
 
 	public boolean finished() {

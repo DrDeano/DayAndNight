@@ -1,10 +1,13 @@
 package serverLogic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
+import gameConfiguration.GameConfiguration;
 import globalClasses.Action;
 import globalClasses.ActionResponse;
 import globalClasses.Pos;
@@ -14,12 +17,13 @@ public class Game {
 
 	private Stats stats;
 	private ArrayList<Interactable> machines;
+	private Function<StatContainer, Double> speedFunction;
 
 	/** Creates a new game and starts the internal clock. */
-	public Game() {
-		new Clock();
+	public Game(GameConfiguration config) {
 		stats = new Stats();
 		machines = new ArrayList<Interactable>();
+		speedFunction = config.getSpeedFunction();
 	}
 
 	/** Update the position of a single player
@@ -106,9 +110,19 @@ public class Game {
 	 * 
 	 * @param id Id of the new player */
 	public void newPlayer(String id) {
-		stats.addPlayer(id);
+		stats.addPlayer(id, speedFunction);
 	}
 
+
+
+	/** Add a new machine */
+	public void addMachine(Interactable machine) {
+		machines.add(machine);
+	}
+	/** Add all machines in a collection */
+	public void addMachines(Collection<Interactable> machines) {
+		machines.forEach(m -> addMachine(m));
+	}
 
 
 	/** Get the machine closest to a player

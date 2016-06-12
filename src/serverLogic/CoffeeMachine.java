@@ -1,5 +1,6 @@
 package serverLogic;
 
+import gameConfiguration.MachineType;
 
 public class CoffeeMachine extends Interactable {
 
@@ -8,13 +9,19 @@ public class CoffeeMachine extends Interactable {
 	private double coffeeRestored;
 	private double coffeeRestoredWhenSabotaged;
 
-	public CoffeeMachine(double useTime, double sabotageTime, double coffeeRestored, double coffeeRestoredWhenSabotaged) {
-		super();
+	public CoffeeMachine(int x, int y, int width, int height, double useTime, double sabotageTime, double coffeeRestored,
+		double coffeeRestoredWhenSabotaged) {
+		super(x, y, width, height, MachineType.COFFEE);
 		this.useTime = useTime;
 		this.sabotageTime = sabotageTime;
 		this.coffeeRestored = coffeeRestored;
 		this.coffeeRestoredWhenSabotaged = coffeeRestoredWhenSabotaged;
 		super.sabotaged = false;
+	}
+	public CoffeeMachine() {
+		super();
+		this.sabotaged = false;
+		this.type = MachineType.COFFEE;
 	}
 
 	@Override

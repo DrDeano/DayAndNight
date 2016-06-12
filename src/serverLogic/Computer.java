@@ -1,5 +1,6 @@
 package serverLogic;
 
+import gameConfiguration.MachineType;
 
 public class Computer extends Interactable {
 
@@ -11,18 +12,22 @@ public class Computer extends Interactable {
 
 
 
-	public Computer(double sabotageTime, double sabotageAmount, Player owner) {
-		super();
+	public Computer(int x, int y, int width, int height, double sabotageTime, double sabotageAmount, Player owner) {
+		super(x, y, width, height, MachineType.COMPUTER);
 		this.sabotageTime = sabotageTime;
 		this.sabotageAmount = sabotageAmount;
 		this.owner = owner;
 	}
 
 
-	public Computer(double sabotageTime, double sabotageAmount) {
-		super();
+	public Computer(int x, int y, int width, int height, double sabotageTime, double sabotageAmount) {
+		super(x, y, width, height, MachineType.COMPUTER);
 		this.sabotageTime = sabotageTime;
 		this.sabotageAmount = sabotageAmount;
+	}
+	public Computer() {
+		this.sabotaged = false;
+		this.type = MachineType.COMPUTER;
 	}
 
 

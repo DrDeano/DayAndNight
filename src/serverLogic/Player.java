@@ -2,6 +2,7 @@ package serverLogic;
 
 import java.awt.geom.Point2D;
 import java.util.Optional;
+import java.util.function.Function;
 
 import globalClasses.Action;
 import globalClasses.Pos;
@@ -14,16 +15,18 @@ public class Player {
 	private double angle;
 	private String id;
 	private StatContainer stats;
+	private Function<StatContainer, Double> speedFunction;
 
 	private Interactable interactingWith = null;
 
 
-	public Player(String id) {
+	public Player(String id, Function<StatContainer, Double> speedFunction) {
 		super();
 		this.x = 0; // TODO set starting positions
 		this.y = 0;
 		this.id = id;
 		this.stats = new StatContainer();
+		this.speedFunction = speedFunction;
 	}
 
 	public void updatePosition(Pos newPosition) {
