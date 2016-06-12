@@ -2,7 +2,7 @@ package serverLogic;
 
 import gameConfiguration.MachineType;
 
-public class CoffeeMachine extends Interactable {
+public class CoffeeMachine extends Machine {
 
 	private double useTime;
 	private double sabotageTime;

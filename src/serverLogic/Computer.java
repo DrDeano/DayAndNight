@@ -7,7 +7,7 @@ import serverNetworking.Server;
 import serverNetworking.ServerLobby;
 import serverNetworking.ServerSender;
 
-public class Computer extends Interactable {
+public class Computer extends Machine {
 
 	private double sabotageTime;
 	private double sabotageAmount;

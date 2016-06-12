@@ -20,7 +20,7 @@ import serverNetworking.ServerLobby;
 
 public class Game {
 
-	public Collection<Interactable> machines; // Temporary public for testing
+	public Collection<Machine> machines; // Temporary public for testing
 	public Collection<Room> rooms;
 	private Function<StatContainer, Double> speedFunction;
 	public HashMap<String, Player> players;
@@ -84,7 +84,7 @@ public class Game {
 				return Optional.empty();
 			}
 			case USE : {
-				Optional<Interactable> machine = getClosest(player);
+				Optional<Machine> machine = getClosest(player);
 				if (machine.isPresent()) {
 					player.setMachine(machine.get(), true);
 					double timeLeft = machine.get().startUsing(player);
@@ -94,7 +94,7 @@ public class Game {
 				}
 			}
 			case SABOTAGE : {
-				Optional<Interactable> machine = getClosest(player);
+				Optional<Machine> machine = getClosest(player);
 				if (machine.isPresent()) {
 					player.setMachine(machine.get(), false);
 					double timeLeft = machine.get().startSabotaging(player);
@@ -149,18 +149,18 @@ public class Game {
 	public void newPlayer(String id) {
 		players.put(id, new Player(id, speedFunction));
 		// Assign to a computer
-		for (Interactable interactable : machines) {
+		for (Machine interactable : machines) {
 			if (interactable.tryAssigningPlayer(players.get(id))) return;
 		}
 		System.err.println("Error - no computer found for " + id);
 	}
 
 	/** Add a new machine */
-	public void addMachine(Interactable machine) {
+	public void addMachine(Machine machine) {
 		machines.add(machine);
 	}
 	/** Add all machines in a collection */
-	public void addMachines(Collection<Interactable> machines) {
+	public void addMachines(Collection<Machine> machines) {
 		machines.forEach(m -> addMachine(m));
 	}
 
@@ -203,9 +203,9 @@ public class Game {
 	 * 
 	 * @param player
 	 * @return Intractable object closest to the player, if they can interact with it. Empty Optional if nothing is in range. */
-	private Optional<Interactable> getClosest(Player player) {
-		Interactable res = null;
-		for (Interactable machine : machines) {
+	private Optional<Machine> getClosest(Player player) {
+		Machine res = null;
+		for (Machine machine : machines) {
 			if (machine.canReach(player)) {
 				if (res == null) res = machine;
 				else if (res.getDistance(player) > machine.getDistance(player)) {

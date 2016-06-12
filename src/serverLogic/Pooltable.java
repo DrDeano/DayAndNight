@@ -2,7 +2,7 @@ package serverLogic;
 
 import gameConfiguration.MachineType;
 
-public class Pooltable extends Interactable {
+public class Pooltable extends Machine {
 
 	private double useTime;
 	private double sabotageTime;

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.function.Function;
 
 import globalClasses.StatContainer;
-import serverLogic.Interactable;
+import serverLogic.Machine;
 import serverLogic.Room;
 import serverNetworking.ServerLobby;
 
@@ -15,7 +15,7 @@ public class GameConfiguration {
 	public double nightTime;
 	public double dayDecay;
 	public double nightDecay;
-	public Collection<Interactable> machines;
+	public Collection<Machine> machines;
 	public Collection<Room> rooms;
 	public Function<StatContainer, Double> speedFunction;
 
@@ -28,14 +28,14 @@ public class GameConfiguration {
 		this.nightTime = nightTime;
 		this.dayDecay = dayDecay;
 		this.nightDecay = nightDecay;
-		this.machines = new HashSet<Interactable>();
+		this.machines = new HashSet<Machine>();
 		this.rooms = new HashSet<Room>();
 		this.speedFunction = speedFunction;
 		this.lobby = lobby;
 	}
 
 
-	public void add(Interactable machine) {
+	public void add(Machine machine) {
 		machines.add(machine);
 	}
 	public void add(Room room) {
@@ -43,7 +43,7 @@ public class GameConfiguration {
 	}
 
 	/** @return All of intractable objects */
-	public Collection<Interactable> getAllMachines() {
+	public Collection<Machine> getAllMachines() {
 		return machines;
 	}
 
@@ -55,7 +55,7 @@ public class GameConfiguration {
 	public double getNightTime() {
 		return nightTime;
 	}
-	public Collection<Interactable> getMachines() {
+	public Collection<Machine> getMachines() {
 		return machines;
 	}
 	public Function<StatContainer, Double> getSpeedFunction() {

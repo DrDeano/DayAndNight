@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import gameConfiguration.MachineType;
 
-public abstract class Interactable {
+public abstract class Machine {
 
 	public static final double interactionDistance = 1;
 
@@ -17,14 +17,14 @@ public abstract class Interactable {
 
 
 
-	public Interactable(int x, int y, int width, int height, MachineType type) {
+	public Machine(int x, int y, int width, int height, MachineType type) {
 		super();
 		this.rectangle = new Rectangle2D.Double(x, y, width, height);
 		this.type = type;
 	}
 
 	// Only for JSON creation
-	public Interactable() {}
+	public Machine() {}
 
 	public boolean canReach(Player player) {
 		return getDistance(player) <= interactionDistance;

@@ -2,7 +2,7 @@ package serverLogic;
 
 import gameConfiguration.MachineType;
 
-public class Sofa extends Interactable {
+public class Sofa extends Machine {
 
 
 	private double useTime;

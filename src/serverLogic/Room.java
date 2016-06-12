@@ -16,7 +16,7 @@ public class Room {
 		players = new HashSet<Player>();
 	}
 
-	public boolean contains(Interactable machine) {
+	public boolean contains(Machine machine) {
 		return bounds.contains(machine.getRectangle());
 	}
 
