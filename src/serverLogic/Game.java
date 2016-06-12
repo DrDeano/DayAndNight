@@ -31,14 +31,14 @@ public class Game {
 	private ServerLobby lobby;
 
 	/** Creates a new game and starts the internal clock. */
-	public Game(GameConfiguration config, ServerLobby lobby) {
+	public Game(GameConfiguration config) {
 		players = new HashMap<String, Player>();
 		rooms = config.getRooms();
 		machines = config.getMachines();
 		machines.forEach(m -> m.findRoom(rooms)); // Sets rooms the machines are in
 		speedFunction = config.getSpeedFunction();
 		this.config = config;
-		this.lobby = lobby;
+		this.lobby = config.getLobby();
 	}
 
 	public void start() {

@@ -4,6 +4,7 @@ import gameConfiguration.MachineType;
 import globalClasses.States;
 import serverNetworking.Packet;
 import serverNetworking.Server;
+import serverNetworking.ServerLobby;
 import serverNetworking.ServerSender;
 
 public class Computer extends Interactable {
@@ -14,20 +15,13 @@ public class Computer extends Interactable {
 	private Player owner;
 	private boolean playerWorking = false;
 
+	private ServerLobby lobby;
 
-
-	public Computer(int x, int y, int width, int height, double sabotageTime, double sabotageAmount, Player owner) {
+	public Computer(int x, int y, int width, int height, double sabotageTime, double sabotageAmount, ServerLobby lobby) {
 		super(x, y, width, height, MachineType.COMPUTER);
 		this.sabotageTime = sabotageTime;
 		this.sabotageAmount = sabotageAmount;
-		this.owner = owner;
-	}
-
-
-	public Computer(int x, int y, int width, int height, double sabotageTime, double sabotageAmount) {
-		super(x, y, width, height, MachineType.COMPUTER);
-		this.sabotageTime = sabotageTime;
-		this.sabotageAmount = sabotageAmount;
+		this.lobby = lobby;
 	}
 	public Computer() {
 		this.sabotaged = false;
@@ -66,7 +60,7 @@ public class Computer extends Interactable {
 			while (!room.contains(owner)) {
 				Thread.sleep(50);
 			}
-			Server.sendToClient(player.getId(), new Packet("Server", States.SABOTAGE_INTERRUPTED, null));
+			lobby.sendToClient(player.getId(), new Packet("Server", States.SABOTAGE_INTERRUPTED, null));
 		} catch (InterruptedException ex) {
 			System.err.println("Sabotaging interrupted. " + ex);
 		}

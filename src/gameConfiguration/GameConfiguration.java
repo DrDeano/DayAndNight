@@ -7,6 +7,7 @@ import java.util.function.Function;
 import globalClasses.StatContainer;
 import serverLogic.Interactable;
 import serverLogic.Room;
+import serverNetworking.ServerLobby;
 
 public class GameConfiguration {
 
@@ -18,8 +19,10 @@ public class GameConfiguration {
 	public Collection<Room> rooms;
 	public Function<StatContainer, Double> speedFunction;
 
+	public ServerLobby lobby;
+
 	public GameConfiguration(double dayTime, double nightTime, double dayDecay, double nightDecay,
-		Function<StatContainer, Double> speedFunction) {
+		Function<StatContainer, Double> speedFunction, ServerLobby lobby) {
 		super();
 		this.dayTime = dayTime;
 		this.nightTime = nightTime;
@@ -28,6 +31,7 @@ public class GameConfiguration {
 		this.machines = new HashSet<Interactable>();
 		this.rooms = new HashSet<Room>();
 		this.speedFunction = speedFunction;
+		this.lobby = lobby;
 	}
 
 
@@ -60,6 +64,9 @@ public class GameConfiguration {
 	}
 	public double getNightDecay() {
 		return nightDecay;
+	}
+	public ServerLobby getLobby() {
+		return lobby;
 	}
 
 
