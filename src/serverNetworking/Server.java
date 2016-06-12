@@ -1,4 +1,4 @@
-package serverside;
+package serverNetworking;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -6,27 +6,25 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import gameConfiguration.ConfigStorage;
 import serverLogic.Game;
 
-/**
- * The main server that listens for clients to connect and create a server
+/** The main server that listens for clients to connect and create a server
  * sender and receiver for each client. Usage: java Server portNumber
  * 
- * @author The_Dean
- *
- */
+ * @author The_Dean */
 public class Server {
 
-	/**
-	 * The main method when the program first starts
+	public static ClientTable client_table = new ClientTable();
+
+	/** The main method when the program first starts
 	 * 
 	 * @param args
-	 *            The arguments form the user
+	 *        The arguments form the user
 	 * @throws IOException
-	 *             If the server can't listen on that port
+	 *         If the server can't listen on that port
 	 * @throws IllegalArgumentException
-	 *             Must only have one argument and is must be a number
-	 */
+	 *         Must only have one argument and is must be a number */
 	public static void main(String[] args) throws IOException, IllegalArgumentException {
 		// Checks the number of arguments, if not one the throw exception
 		if (args.length != 1) {
@@ -34,12 +32,11 @@ public class Server {
 		}
 
 		// Create a new client table contain all details about the clients
-		ClientTable client_table = new ClientTable();
+
 
 		// Initialise a server socket
 		ServerSocket server_socket = null;
 
-		Game game = new Game();
 		int number_of_players = 0;
 
 		// Initialise the server port to listen on
@@ -94,18 +91,20 @@ public class Server {
 					to_client.writeObject("Name accepted: added");
 					to_client.flush();
 
-					game.newPlayer(client_name);
-
 					// Add the client to the table
 					client_table.add(client_name, packet_queue);
+
+					// Create and start a new thread to write to the client:
+					ServerSender basicSender = new ServerSender(client_table.getQueue(client_name), to_client);
+					Thread sender = new Thread(basicSender);
+					sender.start();
+
+					Game game = new Game(ConfigStorage.getTestConfiguration());
+					game.newPlayer(client_name);
 
 					// Create and start a new thread to read from the client
 					Thread receiver = new Thread(new ServerReceiver(client_name, from_client, client_table, game));
 					receiver.start();
-
-					// Create and start a new thread to write to the client:
-					Thread sender = new Thread(new ServerSender(client_table.getQueue(client_name), to_client));
-					sender.start();
 				} else if (number_of_players > 6) {
 					to_client.writeObject("Loby full try later");
 					to_client.flush();
@@ -123,4 +122,10 @@ public class Server {
 			System.err.println(e);
 		}
 	}
+	public static void sendToClient(String clientName, Packet packet) {
+		client_table.getQueue(clientName).offer(packet);
+	}
+
+
+
 }

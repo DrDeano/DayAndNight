@@ -1,6 +1,10 @@
 package serverLogic;
 
 import gameConfiguration.MachineType;
+import globalClasses.States;
+import serverNetworking.Packet;
+import serverNetworking.Server;
+import serverNetworking.ServerSender;
 
 public class Computer extends Interactable {
 
@@ -57,12 +61,12 @@ public class Computer extends Interactable {
 		} catch (InterruptedException e) {}
 	}
 
-	private void processsSabotage() {
+	private void processsSabotage(Player player) {
 		try {
 			while (!room.contains(owner)) {
 				Thread.sleep(50);
 			}
-			// TODO Add interrupting logic
+			Server.sendToClient(player.getId(), new Packet("Server", States.SABOTAGE_INTERRUPTED, null));
 		} catch (InterruptedException ex) {
 			System.err.println("Sabotaging interrupted. " + ex);
 		}
@@ -72,7 +76,7 @@ public class Computer extends Interactable {
 	public double startSabotaging(Player player) {
 		if (room.contains(owner)) return -1;
 		else {
-			(new Thread(() -> processsSabotage())).start();
+			(new Thread(() -> processsSabotage(player))).start();
 			return sabotageTime;
 		}
 	}
