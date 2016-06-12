@@ -77,6 +77,7 @@ public class Main extends JFrame {
 		widthpx = (float)width / tilesW;
 		level = new Level(this);
 		level.init();
+		//Sound.dayNNight.loop();
 	}
 
 	public void update(float deltaTime) {
