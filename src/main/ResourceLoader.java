@@ -30,6 +30,7 @@ public class ResourceLoader {
 			URL url = rl.getClass().getClassLoader().getResource("resources/" + path);
 			return new ImageIcon(url).getImage();
 		}catch (Exception e){
+			e.printStackTrace();
 			return null;
 		}
 	}

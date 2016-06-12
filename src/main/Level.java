@@ -1,14 +1,17 @@
-package ahmed_Deficated;
+package main;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import main.Main;
+import ahmed_Deficated.ImageLoader;
+import ahmed_Deficated.Player;
+import utils.ResourceLoader;
 
 public class Level {
 
-	static int tileSize = 128;
+	public static int tileSize = 64;
 
 	Main main;
 
@@ -21,10 +24,17 @@ public class Level {
 
 	Player p;
 
+	public int getXSize(){
+		return gridWidth * tileSize;
+	}
+	public int getYSize(){
+		return gridHeight * tileSize;
+	}
+	
 	public Level(Main main) {
 		this.main = main;
 	}
-
+	
 	public void init() {
 
 		int[][] mapGridRGB = null;
@@ -45,7 +55,7 @@ public class Level {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		loadTiles(mapGridRGB);
+		// loadTiles(mapGridRGB);
 		loadFloor(mapGridRGB);
 	}
 
@@ -81,21 +91,25 @@ public class Level {
 
 	private void loadFloor(int[][] mapGridRGB) {
 
-		floor = new BufferedImage(gridWidth * tileSize, gridHeight * tileSize, BufferedImage.TYPE_INT_ARGB);
+		floor = new BufferedImage(gridWidth * tileSize, gridHeight * tileSize, BufferedImage.TYPE_INT_RGB);
 		Graphics g = floor.getGraphics();
+		Image floor = ResourceLoader.getImage("carpet.png");
+		Image walls = ResourceLoader.getImage("wallsprites.png");
+		BufferedImage wall = new BufferedImage(16,16,BufferedImage.TYPE_INT_RGB);
+		Graphics g2 = wall.getGraphics();
+		g2.drawImage(walls, 0, 0, 16, 16,0,0,16,16, null);
+		
 		for (int j = 0; j < gridHeight; j++) {
 			for (int i = 0; i < gridWidth; i++) {
 
 				switch (mapGridRGB[j][i]) {
 				case 0xFFA349A4:
-					g.drawImage(Tile.sofa.image, i * tileSize, j * tileSize, tileSize,
-							tileSize, null);
+					g.drawImage(wall, i * tileSize, j * tileSize, tileSize, tileSize, null);
 					break;
 				case 0xFF000000:
 					break;
 				default:
-					g.drawImage(Tile.floor.image, i * tileSize, j * tileSize, tileSize,
-							tileSize, null);
+					g.drawImage(floor, i * tileSize, j * tileSize, tileSize, tileSize, null);
 					break;
 				}
 
@@ -109,8 +123,10 @@ public class Level {
 	}
 
 	public void draw(Graphics g) {
-		g.drawImage(floor, 0, 0, Main.width, Main.height, (int) -Main.diffX, (int) Main.diffY,
-				(int) (-Main.diffX + (Main.tilesW * tileSize)), (int) (Main.diffY + (Main.tilesH * tileSize)), null);
+		g.setColor(Color.red);
+		g.drawRect(0,0,getXSize(),getYSize());
+		g.drawImage(floor, (int)Main.zerXCoord, (int)Main.zeroYCoord, Main.width, Main.height, 0, 0,
+				(int) (Main.tilesW * tileSize), (int) (Main.tilesH * tileSize), null);
 	}
 
 }

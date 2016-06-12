@@ -1,12 +1,11 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
-
-import ahmed_Deficated.Level;
 
 public class Main extends JFrame {
 
@@ -19,11 +18,12 @@ public class Main extends JFrame {
 	public InputHandler input;
 	public Level level;
 	public static int width,height;
-	public static float ratio, tilesW, tilesH, widthpx, heightpx, diffX, diffY;
-	private static float deltas, moveSpeed = 80;
+	public static float ratio, tilesW, tilesH, widthpx, heightpx, zerXCoord, zeroYCoord, root2 = (float) Math.sqrt(2.0);
+	private static float deltas, speed = 16;
 
 	public static void main(String args[]) {
 		Main main = new Main();
+		
 		main.run();
 	}
 
@@ -77,37 +77,115 @@ public class Main extends JFrame {
 		level = new Level(this);
 		level.init();
 	}
-
-	public void update(float deltaTime) {
-		if(input.isKeyDown(KeyEvent.VK_W) && input.isKeyDown(KeyEvent.VK_A)){
-			
-		}else if(input.isKeyDown(KeyEvent.VK_W) && input.isKeyDown(KeyEvent.VK_D)){
-			
-		}else if(input.isKeyDown(KeyEvent.VK_S) && input.isKeyDown(KeyEvent.VK_A)){
-			
-		}else if(input.isKeyDown(KeyEvent.VK_S) && input.isKeyDown(KeyEvent.VK_D)){
-			
-		}else if(input.isKeyDown(KeyEvent.VK_W)){
-			diffY -= moveSpeed * deltas;
-		}else if(input.isKeyDown(KeyEvent.VK_S)){
-			diffY += moveSpeed * deltas;
-		}else if(input.isKeyDown(KeyEvent.VK_A)){
-			diffX += moveSpeed * deltas;
-		}else if(input.isKeyDown(KeyEvent.VK_D)){
-			diffX -= moveSpeed * deltas;
+	
+	// 0,0 top-left
+	// left +
+	// up +
+	public void moveUp(){
+		if(zeroYCoord < -height){
+		zeroYCoord += speed;
+		}
+	}
+	public void moveDown(){
+		if(zeroYCoord > -level.getYSize()){
+			zeroYCoord -= speed;
+		}
+	}
+	public void moveRight(){
+		if(zerXCoord > -level.getXSize()){
+			zerXCoord -= speed;
+		}
+	}
+	public void moveLeft(){
+		if(zerXCoord < width){
+			zerXCoord += speed;
+		}
+	}
+	public void moveUR(){
+		if(zeroYCoord >= height){
+			moveRight();
+		}else if(zerXCoord <= -level.getXSize()){
+			moveUp();
 		}else{
-			
+			zeroYCoord += speed/root2;
+			zerXCoord -= speed/root2;
+		}
+	}
+	public void moveUL(){
+		if(zeroYCoord >= height){
+			moveLeft();
+		}else if(zerXCoord >= 0){
+			moveUp();
+		}else{
+			zeroYCoord += speed/root2;
+			zerXCoord += speed/root2;
+		}
+	}
+	public void moveDR(){
+		if(zeroYCoord <= -level.getYSize()){
+			moveRight();
+		}else if(zerXCoord <= -level.getXSize()){
+			moveDown();
+		}else{
+			zeroYCoord -= speed/root2;
+			zerXCoord -= speed/root2;
+		}
+	}
+	public void moveDL(){
+		if(zeroYCoord <= -level.getYSize()){
+			moveLeft();
+		}else if(zerXCoord >= 0){
+			moveDown();
+		}else{
+			zeroYCoord -= speed/root2;
+			zerXCoord += speed/root2;
+		}
+	}
+	
+	private void update(float deltaTime){
+		
+		if(input.isKeyDown(KeyEvent.VK_W)){
+			if(input.isKeyDown(KeyEvent.VK_D)){
+				moveUR();
+			}else if(input.isKeyDown(KeyEvent.VK_A)){
+				moveUL();
+			}else{
+				moveUp();
+			}
+		}else if(input.isKeyDown(KeyEvent.VK_S)){
+			if(input.isKeyDown(KeyEvent.VK_D)){
+				moveDR();
+			}else if(input.isKeyDown(KeyEvent.VK_A)){
+				moveDL();
+			}else{
+				moveDown();
+			}
+		}else if(input.isKeyDown(KeyEvent.VK_D)){
+			moveRight();
+		}else if(input.isKeyDown(KeyEvent.VK_A)){
+			moveLeft();
+		}
+		
+		if(input.isKeyDown(KeyEvent.VK_ESCAPE)){
+			System.exit(0);
 		}
 		level.update();
+		
 	}
+	
 
 	public void draw() {
 
 		Graphics g = this.getGraphics();
 		Image offImage = this.createImage(width, height);
 		Graphics offGraphics = offImage.getGraphics();
+		offGraphics.setColor(Color.BLACK);
+		offGraphics.fillRect(0, 0, width, height);
+		
 		level.draw(offGraphics);
-		g.drawImage(offImage, 0, 0, this.getWidth(), this.getHeight(), null);
+		offGraphics.setColor(Color.red);
+		offGraphics.fillRect(width/2 - Level.tileSize/2, height/2 - Level.tileSize/2, Level.tileSize, Level.tileSize);
+		g.drawImage(offImage, (int)zerXCoord, (int)zeroYCoord, this.getWidth(), this.getHeight(), null);
 
 	}
 

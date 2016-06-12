@@ -3,6 +3,7 @@ package ahmed_Deficated;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import main.Level;
 import main.Main;
 
 public class Camera {
