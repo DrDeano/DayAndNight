@@ -19,7 +19,8 @@ public class Main extends JFrame {
 	public Level level;
 	private HUD hud;
 	public static int width, height;
-	public static float ratio, tilesW, tilesH, widthpx, heightpx, zerXCoord, zeroYCoord, root2 = (float) Math.sqrt(2.0);
+	public static float ratio, tilesW, tilesH, widthpx, heightpx, zeroXCoord, zeroYCoord,
+			root2 = (float) Math.sqrt(2.0);
 	private static float deltas, speed = 16;
 
 	public static void main(String args[]) {
@@ -84,7 +85,7 @@ public class Main extends JFrame {
 	// left +
 	// up +
 	public void moveUp() {
-		if (zeroYCoord < -height) {
+		if (zeroYCoord < height/2) {
 			zeroYCoord += speed;
 		}
 	}
@@ -96,58 +97,58 @@ public class Main extends JFrame {
 	}
 
 	public void moveRight() {
-		if (zerXCoord > -level.getXSize()) {
-			zerXCoord -= speed;
+		if (zeroXCoord > -level.getXSize()) {
+			zeroXCoord -= speed;
 		}
 	}
 
 	public void moveLeft() {
-		if (zerXCoord < width) {
-			zerXCoord += speed;
+		if (zeroXCoord < width) {
+			zeroXCoord += speed;
 		}
 	}
 
 	public void moveUR() {
 		if (zeroYCoord >= height) {
 			moveRight();
-		} else if (zerXCoord <= -level.getXSize()) {
+		} else if (zeroXCoord <= -level.getXSize()) {
 			moveUp();
 		} else {
 			zeroYCoord += speed / root2;
-			zerXCoord -= speed / root2;
+			zeroXCoord -= speed / root2;
 		}
 	}
 
 	public void moveUL() {
 		if (zeroYCoord >= height) {
 			moveLeft();
-		} else if (zerXCoord >= 0) {
+		} else if (zeroXCoord >= 0) {
 			moveUp();
 		} else {
 			zeroYCoord += speed / root2;
-			zerXCoord += speed / root2;
+			zeroXCoord += speed / root2;
 		}
 	}
 
 	public void moveDR() {
 		if (zeroYCoord <= -level.getYSize()) {
 			moveRight();
-		} else if (zerXCoord <= -level.getXSize()) {
+		} else if (zeroXCoord <= -level.getXSize()) {
 			moveDown();
 		} else {
 			zeroYCoord -= speed / root2;
-			zerXCoord -= speed / root2;
+			zeroXCoord -= speed / root2;
 		}
 	}
 
 	public void moveDL() {
 		if (zeroYCoord <= -level.getYSize()) {
 			moveLeft();
-		} else if (zerXCoord >= 0) {
+		} else if (zeroXCoord >= 0) {
 			moveDown();
 		} else {
 			zeroYCoord -= speed / root2;
-			zerXCoord += speed / root2;
+			zeroXCoord += speed / root2;
 		}
 	}
 
@@ -192,10 +193,10 @@ public class Main extends JFrame {
 
 		level.draw(offGraphics);
 		offGraphics.setColor(Color.red);
-		offGraphics.fillRect(width / 2 - Level.tileSize / 2, height / 2 - Level.tileSize / 2, Level.tileSize,
-				Level.tileSize);
+		offGraphics.fillRect((width / 2 - Level.tileSize / 2) - (int) zeroXCoord,
+				(height / 2 - Level.tileSize / 2) - (int) zeroYCoord, Level.tileSize, Level.tileSize);
+		g.drawImage(offImage, 0, 0, this.getWidth(), this.getHeight(), null);
 		hud.draw(offGraphics);
-		g.drawImage(offImage, (int) zerXCoord, (int) zeroYCoord, this.getWidth(), this.getHeight(), null);
 
 	}
 

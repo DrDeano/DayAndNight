@@ -5,8 +5,6 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import ahmed_Deficated.ImageLoader;
-import ahmed_Deficated.Player;
 import utils.ResourceLoader;
 
 public class Level {
@@ -40,7 +38,7 @@ public class Level {
 		int[][] mapGridRGB = null;
 
 		try {
-			BufferedImage gridImage = ImageLoader.objects;
+			BufferedImage gridImage = ResourceLoader.getBufferedImage("objects.png");
 			gridWidth = gridImage.getWidth();
 			gridHeight = gridImage.getHeight();
 			int[] mapArrayRGB = gridImage.getRGB(0, 0, gridWidth, gridHeight, null, 0, gridWidth);
@@ -125,8 +123,8 @@ public class Level {
 	public void draw(Graphics g) {
 		g.setColor(Color.red);
 		g.drawRect(0,0,getXSize(),getYSize());
-		g.drawImage(floor, (int)Main.zerXCoord, (int)Main.zeroYCoord, Main.width, Main.height, 0, 0,
-				(int) (Main.tilesW * tileSize), (int) (Main.tilesH * tileSize), null);
+		g.drawImage(floor, 0, 0, getXSize(), getYSize(), 0, 0,
+				floor.getWidth(null), floor.getHeight(null), null);
 	}
 
 }
