@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import gameConfiguration.MachineType;
 
+/** Abstract machine, containing a position rectangle */
 public abstract class Machine {
 
 	public static final double interactionDistance = 1;

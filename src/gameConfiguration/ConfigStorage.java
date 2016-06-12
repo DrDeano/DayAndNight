@@ -39,6 +39,7 @@ public class ConfigStorage {
 		res.add(new CoffeeMachine(15, 5, 2, 2, 20, 1, 70, 35));
 		res.add(new CoffeeMachine(12, 5, 2, 2, 10, 1, 40, 10));
 
+		// Rooms (for checking if you can sabotage somebody's computer)
 		res.add(new Room(4, 4, 7, 7));
 		res.add(new Room(12, 4, 6, 6));
 

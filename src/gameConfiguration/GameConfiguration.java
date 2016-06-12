@@ -9,6 +9,7 @@ import serverLogic.Machine;
 import serverLogic.Room;
 import serverNetworking.ServerLobby;
 
+/** Object with all configuration data about the game. Includes data about all machines. */
 public class GameConfiguration {
 
 	public double dayTime;
