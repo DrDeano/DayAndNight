@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import gameConfiguration.GameConfiguration;
 import globalClasses.Action;
@@ -48,6 +49,12 @@ public class Game {
 	public void updatePosition(String playerId, Pos position) {
 		players.get(playerId).updatePosition(position);
 	}
+
+	/** @return Collection with Ids of all current players */
+	public Collection<String> getAlldIds() {
+		return players.values().stream().map(p -> p.getId()).collect(Collectors.toList());
+	}
+
 	/** Execute an action as a player. Call this when a player sends a new action (not movement).
 	 * 
 	 * @param playerId

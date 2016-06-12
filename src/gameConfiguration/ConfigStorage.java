@@ -8,7 +8,6 @@ import serverLogic.Computer;
 import serverLogic.Room;
 import serverLogic.Sofa;
 import serverLogic.Stat;
-import serverNetworking.ServerSender;
 
 public class ConfigStorage {
 
