@@ -12,7 +12,7 @@ public abstract class Interactable {
 
 	public MachineType type;
 	protected Rectangle2D.Double rectangle;
-	private Room room;
+	protected Room room;
 	protected boolean sabotaged;
 
 

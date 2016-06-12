@@ -73,7 +73,8 @@ public class Game {
 				if (machine.isPresent()) {
 					player.setMachine(machine.get());
 					double timeLeft = machine.get().startSabotaging(player);
-					return Optional.of(new ActionResponse(Optional.of(timeLeft), true));
+					if (timeLeft < 0) return Optional.of(new ActionResponse(Optional.empty(), false));
+					else return Optional.of(new ActionResponse(Optional.of(timeLeft), true));
 				} else {
 					return Optional.of(new ActionResponse(Optional.empty(), false));
 				}

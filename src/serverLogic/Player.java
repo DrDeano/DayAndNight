@@ -80,7 +80,6 @@ public class Player {
 			return false;
 		}
 	}
-
 	@Override
 	public int hashCode() {
 		return id.hashCode();
