@@ -34,6 +34,9 @@ public class Computer extends Interactable {
 	public void assignOwner(Player player) {
 		this.owner = player;
 	}
+	public boolean hasOwner() {
+		return owner != null;
+	}
 
 	@Override
 	public double startUsing(Player player) {

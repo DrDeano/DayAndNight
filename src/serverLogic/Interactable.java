@@ -53,6 +53,18 @@ public abstract class Interactable {
 		rooms.stream().filter(r -> r.contains(this)).findAny().ifPresent(r -> room = r);
 	}
 
+	public boolean tryAssigningPlayer(Player player) {
+		try {
+			Computer computer = (Computer) this;
+			if (!computer.hasOwner()) {
+				computer.assignOwner(player);
+				return true;
+			} else return false;
+		} catch (ClassCastException ex) {
+			return false;
+		}
+	}
+
 	abstract public double startUsing(Player player);
 	abstract public double startSabotaging(Player player);
 

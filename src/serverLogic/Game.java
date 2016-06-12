@@ -1,6 +1,5 @@
 package serverLogic;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -22,8 +21,6 @@ public class Game {
 	private HashMap<String, Player> players;
 
 	private GameConfiguration config;
-	private double dayTime;
-	private double nightTime;
 	private boolean nightStarted = false;
 
 	/** Creates a new game and starts the internal clock. */
@@ -127,6 +124,11 @@ public class Game {
 	 * @param id Id of the new player */
 	public void newPlayer(String id) {
 		players.put(id, new Player(id, speedFunction));
+		// Assign to a computer
+		for (Interactable interactable : machines) {
+			if (interactable.tryAssigningPlayer(players.get(id))) return;
+		}
+		System.err.println("Error - no computer found for " + id);
 	}
 
 	/** Add a new machine */
