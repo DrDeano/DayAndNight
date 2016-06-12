@@ -21,6 +21,11 @@ public class Game {
 	private Function<StatContainer, Double> speedFunction;
 	private HashMap<String, Player> players;
 
+	private GameConfiguration config;
+	private double dayTime;
+	private double nightTime;
+	private boolean nightStarted = false;
+
 	/** Creates a new game and starts the internal clock. */
 	public Game(GameConfiguration config) {
 		players = new HashMap<String, Player>();
@@ -28,6 +33,7 @@ public class Game {
 		machines = config.getMachines();
 		machines.forEach(m -> m.findRoom(rooms)); // Sets rooms the machines are in
 		speedFunction = config.getSpeedFunction();
+		this.config = config;
 	}
 
 	public void start() {
@@ -123,21 +129,6 @@ public class Game {
 		players.put(id, new Player(id, speedFunction));
 	}
 
-
-	private void mainLoop() {
-		try {
-			while (true) {
-				rooms.forEach(r -> r.update(players.values()));
-				if (players.values().stream().anyMatch(p -> p.getStats().isFinished())) break; // TODO Actual game ending condition
-				Thread.sleep(50);
-			}
-		} catch (InterruptedException ex) {
-			System.err.println("Main game loop interrupted with " + ex);
-		}
-	}
-
-
-
 	/** Add a new machine */
 	public void addMachine(Interactable machine) {
 		machines.add(machine);
@@ -146,6 +137,23 @@ public class Game {
 	public void addMachines(Collection<Interactable> machines) {
 		machines.forEach(m -> addMachine(m));
 	}
+
+
+	private void mainLoop() {
+		try {
+			while (true) {
+				if (Clock.getTime() > config.getDayTime()) nightStarted = true;
+				rooms.forEach(r -> r.update(players.values()));
+				double decay = nightStarted ? config.getDayDecay() : config.getNightDecay();
+				players.values().forEach(p -> p.getStats().decay(decay * 0.05));
+				if (players.values().stream().anyMatch(p -> p.getStats().isFinished())) break; // TODO Actual game ending condition
+				Thread.sleep(50);
+			}
+		} catch (InterruptedException ex) {
+			System.err.println("Main game loop interrupted with " + ex);
+		}
+	}
+
 
 
 	/** Get the machine closest to a player

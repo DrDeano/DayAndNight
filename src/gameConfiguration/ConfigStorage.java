@@ -19,7 +19,8 @@ public class ConfigStorage {
 			return Math.sqrt(stats.getPercentageProduct(arguments)); // Max speed is 1
 		});
 
-		GameConfiguration res = new GameConfiguration(500, 300, speedFunction);
+		// Main config: Day time, Night time (in seconds), Stat decay rate sin daytime, Stat decay rate during night (in units per second)
+		GameConfiguration res = new GameConfiguration(500, 300, 0.5, 1.5, speedFunction);
 
 		// Adding all machines
 

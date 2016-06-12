@@ -12,14 +12,19 @@ public class GameConfiguration {
 
 	public double dayTime;
 	public double nightTime;
+	public double dayDecay;
+	public double nightDecay;
 	public Collection<Interactable> machines;
 	public Collection<Room> rooms;
 	public Function<StatContainer, Double> speedFunction;
 
-	public GameConfiguration(double dayTime, double nightTime, Function<StatContainer, Double> speedFunction) {
+	public GameConfiguration(double dayTime, double nightTime, double dayDecay, double nightDecay,
+		Function<StatContainer, Double> speedFunction) {
 		super();
 		this.dayTime = dayTime;
 		this.nightTime = nightTime;
+		this.dayDecay = dayDecay;
+		this.nightDecay = nightDecay;
 		this.machines = new HashSet<Interactable>();
 		this.rooms = new HashSet<Room>();
 		this.speedFunction = speedFunction;
@@ -49,6 +54,12 @@ public class GameConfiguration {
 	}
 	public Collection<Room> getRooms() {
 		return rooms;
+	}
+	public double getDayDecay() {
+		return dayDecay;
+	}
+	public double getNightDecay() {
+		return nightDecay;
 	}
 
 

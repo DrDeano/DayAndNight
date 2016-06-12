@@ -29,6 +29,11 @@ public class StatContainer {
 		}
 		correctAllStats();
 	}
+	public void decay(double value) {
+		for (Entry<Stat, Double> entry : table.entrySet()) {
+			if (!entry.getKey().equals(Stat.PROGRESS)) entry.setValue(entry.getValue() + value);
+		}
+	}
 
 	public void increase(Stat stat, double value) {
 		table.put(stat, value);
