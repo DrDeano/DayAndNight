@@ -7,7 +7,7 @@ import java.util.Collection;
 import gameConfiguration.ConfigStorage;
 import serverLogic.Game;
 
-public class ServerLoby implements Runnable {
+public class ServerLobby implements Runnable {
 
 	private Game game;
 	private int number_of_players;
@@ -15,7 +15,7 @@ public class ServerLoby implements Runnable {
 	private ObjectInputStream from_client;
 	private ClientTable client_table;
 	
-	public ServerLoby() {
+	public ServerLobby() {
 		game = new Game(ConfigStorage.getTestConfiguration());
 		number_of_players = 0;
 		client_table = new ClientTable();
