@@ -51,4 +51,9 @@ public class CoffeeMachine extends Interactable {
 		this.sabotaged = true;
 	}
 
+	@Override
+	public String toString() {
+		return "Coffee machine at x=" + rectangle.x + ", y=" + rectangle.y + ". " + (sabotaged ? "Currently sabotaged" : "Not sabotaged.");
+	}
+
 }

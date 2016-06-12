@@ -52,7 +52,7 @@ public class Sofa extends Interactable {
 
 	@Override
 	public String toString() {
-		return "Sofa At x=" + super.rectangle.x + " and y=" + super.rectangle.y;
+		return "Sofa at x=" + rectangle.x + ", y=" + rectangle.y + ". " + (sabotaged ? "Currently sabotaged" : "Not sabotaged.");
 	}
 
 }

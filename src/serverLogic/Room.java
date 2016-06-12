@@ -44,5 +44,10 @@ public class Room {
 		} else return false;
 	}
 
+	@Override
+	public String toString() {
+		return "Room at " + bounds;
+	}
+
 
 }

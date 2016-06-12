@@ -96,4 +96,9 @@ public class Computer extends Interactable {
 
 	}
 
+	@Override
+	public String toString() {
+		return "Computer at x=" + rectangle.x + ", y=" + rectangle.y + ". Owned by " + owner;
+	}
+
 }

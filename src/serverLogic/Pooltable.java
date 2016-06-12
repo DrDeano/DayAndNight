@@ -46,4 +46,9 @@ public class Pooltable extends Interactable {
 		sabotaged = true;
 	}
 
+	@Override
+	public String toString() {
+		return "Pool table at x=" + rectangle.x + ", y=" + rectangle.y + ". " + (sabotaged ? "Currently sabotaged" : "Not sabotaged.");
+	}
+
 }
