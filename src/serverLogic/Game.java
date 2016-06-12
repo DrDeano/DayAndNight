@@ -15,7 +15,6 @@ import globalClasses.Pos;
 import globalClasses.StatContainer;
 import globalClasses.States;
 import serverNetworking.Packet;
-import serverNetworking.Server;
 import serverNetworking.ServerLobby;
 
 public class Game {

@@ -3,9 +3,7 @@ package serverLogic;
 import gameConfiguration.MachineType;
 import globalClasses.States;
 import serverNetworking.Packet;
-import serverNetworking.Server;
 import serverNetworking.ServerLobby;
-import serverNetworking.ServerSender;
 
 public class Computer extends Machine {
 
@@ -23,11 +21,6 @@ public class Computer extends Machine {
 		this.sabotageAmount = sabotageAmount;
 		this.lobby = lobby;
 	}
-	public Computer() {
-		this.sabotaged = false;
-		this.type = MachineType.COMPUTER;
-	}
-
 
 	public void assignOwner(Player player) {
 		this.owner = player;

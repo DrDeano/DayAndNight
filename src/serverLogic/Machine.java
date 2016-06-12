@@ -23,9 +23,6 @@ public abstract class Machine {
 		this.type = type;
 	}
 
-	// Only for JSON creation
-	public Machine() {}
-
 	public boolean canReach(Player player) {
 		return getDistance(player) <= interactionDistance;
 	}
