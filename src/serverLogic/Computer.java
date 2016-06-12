@@ -32,7 +32,7 @@ public class Computer extends Interactable {
 
 
 	public void assignOwner(Player player) {
-		this.owner = owner;
+		this.owner = player;
 	}
 
 	@Override
@@ -54,9 +54,24 @@ public class Computer extends Interactable {
 		} catch (InterruptedException e) {}
 	}
 
+	private void processsSabotage() {
+		try {
+			while (!room.contains(owner)) {
+				Thread.sleep(50);
+			}
+			// TODO Add interrupting logic
+		} catch (InterruptedException ex) {
+			System.err.println("Sabotaging interrupted. " + ex);
+		}
+	}
+
 	@Override
 	public double startSabotaging(Player player) {
-		return sabotageTime;
+		if (room.contains(owner)) return -1;
+		else {
+			(new Thread(() -> processsSabotage())).start();
+			return sabotageTime;
+		}
 	}
 
 	@Override
