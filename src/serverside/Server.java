@@ -7,7 +7,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import serverLogic.Game;
-import serverLogic.Stats;
 
 /**
  * The main server that listens for clients to connect and create a server
@@ -40,8 +39,8 @@ public class Server {
 		// Initialise a server socket
 		ServerSocket server_socket = null;
 
-		Stats main_logic = new Stats();
 		Game game = new Game();
+		int number_of_players = 0;
 
 		// Initialise the server port to listen on
 		int server_port = 0;
@@ -67,6 +66,7 @@ public class Server {
 				// Wait for a connection
 				// Stuck until somebody connects
 				Socket client_socet = server_socket.accept();
+				number_of_players++;
 
 				// Create a new message queue for the client that just connected
 				PacketQueue packet_queue = new PacketQueue();
@@ -91,27 +91,31 @@ public class Server {
 				// then create a new user
 				if (client_table.getQueue(client_name) == null) { // New user
 					// Tell to client connection is successful
-					to_client.writeObject(true);
+					to_client.writeObject("Name accepted: added");
 					to_client.flush();
 
-					main_logic.addPlayer(client_name);
+					game.newPlayer(client_name);
 
 					// Add the client to the table
 					client_table.add(client_name, packet_queue);
 
 					// Create and start a new thread to read from the client
-					Thread receiver = new Thread(new ServerReceiver(client_name, from_client, client_table, main_logic, game));
+					Thread receiver = new Thread(new ServerReceiver(client_name, from_client, client_table, game));
 					receiver.start();
 
 					// Create and start a new thread to write to the client:
 					Thread sender = new Thread(new ServerSender(client_table.getQueue(client_name), to_client));
 					sender.start();
-
+				} else if (number_of_players > 6) {
+					to_client.writeObject("Loby full try later");
+					to_client.flush();
+					number_of_players--;
 				} else {
 					// Tell to client that there name already exists and choose
 					// another
-					to_client.writeObject(false);
+					to_client.writeObject("Name taken, choose another");
 					to_client.flush();
+					number_of_players--;
 				}
 			}
 		} catch (IOException e) {

@@ -9,22 +9,18 @@ import globalClasses.ActionResponse;
 import globalClasses.Pos;
 import globalClasses.States;
 import serverLogic.Game;
-import serverLogic.Player;
-import serverLogic.Stats;
 
 public class ServerReceiver implements Runnable {
 
 	private ObjectInputStream from_client;
 	private ClientTable client_table;
 	private String client_name;
-	private Stats game_stats;
 	private Game game;
 
-	public ServerReceiver(String n, ObjectInputStream c, ClientTable t, Stats game_stats, Game game) {
+	public ServerReceiver(String n, ObjectInputStream c, ClientTable t, Game game) {
 		client_name = n;
 		from_client = c;
 		client_table = t;
-		this.game_stats = game_stats;
 		this.game = game;
 	}
 
@@ -55,7 +51,7 @@ public class ServerReceiver implements Runnable {
 					}
 				}
 
-				get_player(client_name).updatePosition((Pos) packet.getData());
+				game.updatePosition(client_name, (Pos) packet.getData());
 				break;
 
 			case COMPUTER:
@@ -116,10 +112,6 @@ public class ServerReceiver implements Runnable {
 	}
 
 	private void start_game() {
-
-	}
-
-	private Player get_player(String player_name) {
-		return game_stats.getPlayers().get(player_name);
+		
 	}
 }
