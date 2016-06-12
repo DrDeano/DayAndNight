@@ -17,6 +17,7 @@ public class Player {
 	private Function<StatContainer, Double> speedFunction;
 
 	private Interactable interactingWith = null;
+	private boolean isUsing; // Opposite is sabotaging
 
 
 	public Player(String id, Function<StatContainer, Double> speedFunction) {
@@ -54,11 +55,16 @@ public class Player {
 	public StatContainer getStats() {
 		return stats;
 	}
-	public void setMachine(Interactable machine) {
+	public void setMachine(Interactable machine, boolean using) {
 		this.interactingWith = machine;
+		this.isUsing = using;
 	}
 	public Optional<Interactable> getMachine() {
 		return Optional.ofNullable(interactingWith);
+	}
+	/** @return True it player is using a machine, false if sabotaging */
+	public boolean getIntercaction() {
+		return isUsing;
 	}
 	public double getSpeed() {
 		return speedFunction.apply(stats);
@@ -83,6 +89,15 @@ public class Player {
 	@Override
 	public int hashCode() {
 		return id.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return "Player " + id + " at x=" + x + ", y=" + y;
+	}
+
+	public String getPrintableStats() {
+		return stats.printableStats();
 	}
 
 }

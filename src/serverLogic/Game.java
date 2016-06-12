@@ -15,10 +15,10 @@ import globalClasses.StatContainer;
 
 public class Game {
 
-	private Collection<Interactable> machines;
-	private Collection<Room> rooms;
+	public Collection<Interactable> machines; // Temporary public for testing
+	public Collection<Room> rooms;
 	private Function<StatContainer, Double> speedFunction;
-	private HashMap<String, Player> players;
+	public HashMap<String, Player> players;
 
 	private GameConfiguration config;
 	private boolean nightStarted = false;
@@ -43,7 +43,7 @@ public class Game {
 	 * @param playerId Id of the player
 	 * @param position new position */
 	public void updatePosition(String playerId, Pos position) {
-		players.values().forEach(p -> p.updatePosition(position));
+		players.get(playerId).updatePosition(position);
 	}
 	/** Execute an action as a player. Call this when a player sends a new action (not movement).
 	 * 
@@ -58,13 +58,21 @@ public class Game {
 			case CANCEL :
 				player.getMachine().ifPresent(m -> {
 					m.cancelAction(player);
-					player.setMachine(null);
+					player.setMachine(null, false);
 				});
 				return Optional.empty();
+			case FINISH : {
+				player.getMachine().ifPresent(m -> {
+					if (player.getIntercaction()) m.finishUsing(player);
+					else m.finishSabotaging(player);
+					player.setMachine(null, false);
+				});
+				return Optional.empty();
+			}
 			case USE : {
 				Optional<Interactable> machine = getClosest(player);
 				if (machine.isPresent()) {
-					player.setMachine(machine.get());
+					player.setMachine(machine.get(), true);
 					double timeLeft = machine.get().startUsing(player);
 					return Optional.of(new ActionResponse(Optional.of(timeLeft), true));
 				} else {
@@ -74,10 +82,12 @@ public class Game {
 			case SABOTAGE : {
 				Optional<Interactable> machine = getClosest(player);
 				if (machine.isPresent()) {
-					player.setMachine(machine.get());
+					player.setMachine(machine.get(), false);
 					double timeLeft = machine.get().startSabotaging(player);
-					if (timeLeft < 0) return Optional.of(new ActionResponse(Optional.empty(), false));
-					else return Optional.of(new ActionResponse(Optional.of(timeLeft), true));
+					if (timeLeft < 0) {
+						player.setMachine(null, false);
+						return Optional.of(new ActionResponse(Optional.empty(), false));
+					} else return Optional.of(new ActionResponse(Optional.of(timeLeft), true));
 				} else {
 					return Optional.of(new ActionResponse(Optional.empty(), false));
 				}

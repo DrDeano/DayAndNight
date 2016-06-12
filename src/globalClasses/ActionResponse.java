@@ -11,5 +11,10 @@ public class ActionResponse {
 		this.success = success;
 	}
 
+	@Override
+	public String toString() {
+		if (!success) return "Failed action";
+		else return "Succesful action, time left: " + timeLeft.get();
+	}
 
 }

@@ -13,6 +13,7 @@ public class Room {
 	public Room(int x, int y, int width, int height) {
 		super();
 		this.bounds = new Rectangle2D.Double(x, y, width, height);
+		players = new HashSet<Player>();
 	}
 
 	public boolean contains(Interactable machine) {
@@ -46,7 +47,11 @@ public class Room {
 
 	@Override
 	public String toString() {
-		return "Room at " + bounds;
+		String contains = "";
+		for (Player player : players) {
+			contains += player + "\n";
+		}
+		return "Room at " + bounds + ". Contains " + contains;
 	}
 
 

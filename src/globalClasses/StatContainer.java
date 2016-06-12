@@ -29,14 +29,17 @@ public class StatContainer {
 		}
 		correctAllStats();
 	}
+	/** Decreases all values except for progress by a specified amount
+	 * 
+	 * @param value Value to decrease stats by. Sign is ignored (stats always go down). */
 	public void decay(double value) {
 		for (Entry<Stat, Double> entry : table.entrySet()) {
-			if (!entry.getKey().equals(Stat.PROGRESS)) entry.setValue(entry.getValue() + value);
+			if (!entry.getKey().equals(Stat.PROGRESS)) entry.setValue(entry.getValue() + -Math.abs(value));
 		}
 	}
 
 	public void increase(Stat stat, double value) {
-		table.put(stat, value);
+		table.put(stat, table.get(stat) + value);
 		correctStat(stat);
 
 	}
@@ -66,6 +69,14 @@ public class StatContainer {
 	private void correctStat(Stat stat) {
 		if (table.get(stat) < minValue) table.put(stat, minValue);
 		else if (table.get(stat) > maxValue) table.put(stat, maxValue);
+	}
+
+	public String printableStats() {
+		String res = "";
+		for (Entry<Stat, Double> stat : table.entrySet()) {
+			res += stat.getKey() + " = " + stat.getValue() + "\n";
+		}
+		return res;
 	}
 
 

@@ -48,6 +48,7 @@ public class Sofa extends Interactable {
 	@Override
 	public void finishSabotaging(Player player) {
 		sabotaged = true;
+		System.err.println(this + " has been successfully sabotaged by " + player);
 	}
 
 	@Override

@@ -93,7 +93,7 @@ public class Computer extends Interactable {
 	@Override
 	public void finishSabotaging(Player player) {
 		owner.changeStat(Stat.PROGRESS, -sabotageAmount);
-
+		System.err.println("Substracting " + sabotageAmount + " progress from " + owner);
 	}
 
 	@Override
