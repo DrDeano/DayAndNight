@@ -13,8 +13,6 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.swing.ImageIcon;
 
-import ahmed_Deficated.ImageLoader;
-
 public class ResourceLoader {
 	
 	private static ResourceLoader rl = new ResourceLoader();
@@ -27,7 +25,7 @@ public class ResourceLoader {
 	 */
 	public static Image getImage(String path){
 		try{
-			URL url = rl.getClass().getClassLoader().getResource("resources/" + path);
+			URL url = rl.getClass().getClassLoader().getResource("resources/textures/" + path);
 			return new ImageIcon(url).getImage();
 		}catch (Exception e){
 			return null;
@@ -36,7 +34,7 @@ public class ResourceLoader {
 	
 	public static BufferedImage getBufferedImage(String path) {
 		try {
-			return ImageIO.read(ResourceLoader.class.getResource("/resources/" + path));
+			return ImageIO.read(ResourceLoader.class.getResource("/resources/textures/" + path));
 		} catch (IOException e) {
 			System.out.println("failed to load");
 			e.printStackTrace();
@@ -91,7 +89,7 @@ public class ResourceLoader {
 	 */
 	public static AudioInputStream getSound(String path){
 		try {
-			URL url = rl.getClass().getClassLoader().getResource("resources/" + path);
+			URL url = rl.getClass().getClassLoader().getResource("resources/sound/" + path);
 			return AudioSystem.getAudioInputStream(url);
 		} catch (Exception e) {
 			e.printStackTrace();

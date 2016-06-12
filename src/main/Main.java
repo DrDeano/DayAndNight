@@ -18,6 +18,7 @@ public class Main extends JFrame {
 
 	public InputHandler input;
 	public Level level;
+	private HUD hud;
 	public static int width,height;
 	public static float ratio, tilesW, tilesH, widthpx, heightpx, diffX, diffY;
 	private static float deltas, moveSpeed = 80;
@@ -62,7 +63,7 @@ public class Main extends JFrame {
 		this.setVisible(true);
 		width = this.getWidth();
 		height = this.getHeight();
-		
+		hud = new HUD();
 		ratio = (float)width / (float)height;
 		int tiles = 16;
 		if(height > width){
@@ -76,6 +77,7 @@ public class Main extends JFrame {
 		widthpx = (float)width / tilesW;
 		level = new Level(this);
 		level.init();
+		//Sound.dayNNight.loop();
 	}
 
 	public void update(float deltaTime) {
@@ -99,6 +101,7 @@ public class Main extends JFrame {
 			
 		}
 		level.update();
+		hud.update();
 	}
 
 	public void draw() {
@@ -107,6 +110,7 @@ public class Main extends JFrame {
 		Image offImage = this.createImage(width, height);
 		Graphics offGraphics = offImage.getGraphics();
 		level.draw(offGraphics);
+		hud.draw(offGraphics);
 		g.drawImage(offImage, 0, 0, this.getWidth(), this.getHeight(), null);
 
 	}
