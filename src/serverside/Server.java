@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import serverLogic.Game;
 import serverLogic.Stats;
 
 /**
@@ -40,6 +41,7 @@ public class Server {
 		ServerSocket server_socket = null;
 
 		Stats main_logic = new Stats();
+		Game game = new Game();
 
 		// Initialise the server port to listen on
 		int server_port = 0;
@@ -98,7 +100,7 @@ public class Server {
 					client_table.add(client_name, packet_queue);
 
 					// Create and start a new thread to read from the client
-					Thread receiver = new Thread(new ServerReceiver(client_name, from_client, client_table, main_logic));
+					Thread receiver = new Thread(new ServerReceiver(client_name, from_client, client_table, main_logic, game));
 					receiver.start();
 
 					// Create and start a new thread to write to the client:

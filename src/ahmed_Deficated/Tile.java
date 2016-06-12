@@ -1,4 +1,4 @@
-package ahmed;
+package ahmed_Deficated;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -28,7 +28,6 @@ public class Tile {
 		this.solid=solid;
 		this.tileColor=tileColor;
 		objectTiles.add(this);
-		System.out.println(0);
 	}
 	
 	public void interact(Object o){

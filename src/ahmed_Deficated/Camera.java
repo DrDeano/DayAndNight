@@ -1,4 +1,4 @@
-package ahmed;
+package ahmed_Deficated;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -19,32 +19,26 @@ public class Camera {
 	Main main;
 	Level level;
 
-	int mainWidth;
-	int mainHeight;
-
 	public Camera(Main main, Level level) {
 		this.main = main;
 		this.level = level;
 		roomWidth = level.getLevelWidth();
 		roomHeight = level.getLevelHeight();
 
-		mainWidth = main.getWidth();
-		mainHeight = main.getHeight();
-
-		centerX = mainWidth / 2;
-		centerY = mainHeight / 2;
+		centerX = Main.width / 2;
+		centerY = Main.height / 2;
 	}
 
 	private void reposition() {
 		xOffset = Math.max(0, xOffset);
-		xOffset = Math.min((roomWidth * Tile.tileSize) - mainWidth, xOffset);
+		xOffset = Math.min((roomWidth * Tile.tileSize) -  Main.width, xOffset);
 		yOffset = Math.max(0, yOffset);
-		yOffset = Math.min((roomHeight * Tile.tileSize) - mainHeight, yOffset);
+		yOffset = Math.min((roomHeight * Tile.tileSize) - Main.height, yOffset);
 	}
 
 	public void centerOnPlayer() {
-		double nxOffset = level.p.x - mainWidth / 2;
-		double nyOffset = level.p.y - mainHeight / 2;
+		double nxOffset = level.p.x -  Main.width / 2;
+		double nyOffset = level.p.y - Main.height / 2;
 		if (xOffset != nxOffset) {
 			xOffset += (nxOffset - xOffset) * 0.1;
 		}

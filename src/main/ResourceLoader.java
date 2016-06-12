@@ -13,7 +13,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.swing.ImageIcon;
 
-import ahmed.ImageLoader;
+import ahmed_Deficated.ImageLoader;
 
 public class ResourceLoader {
 	

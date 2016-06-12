@@ -1,4 +1,4 @@
-package ahmed;
+package ahmed_Deficated;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -15,8 +15,7 @@ public class Player {
 	Pos pos;
 	int id;
 	Main main;
-Level level;
-Camera cam;
+
 	double sanity = 1;
 	double caffeine = 1;
 	double fun = 1;
@@ -25,9 +24,10 @@ Camera cam;
 	double x;
 	double y;
 
+	int scale = Tile.scale;
 	int tileSize = Tile.tileSize;
 
-	static final double baseSpeed = 2;
+	static final double baseSpeed = 5;
 
 	double moveSpeed = baseSpeed;
 
@@ -39,8 +39,6 @@ Camera cam;
 		this.y = y;
 		getSprite();
 		input = main.input;
-		level = main.level;
-		cam = level.cam;
 	}
 
 	private void getSprite() {
@@ -70,47 +68,46 @@ Camera cam;
 
 	public void update() {
 		boolean left = input.isKeyDown(KeyEvent.VK_LEFT);
-		boolean right = input.isKeyDown(KeyEvent.VK_RIGHT);
-		boolean up = input.isKeyDown(KeyEvent.VK_UP);
-		boolean down = input.isKeyDown(KeyEvent.VK_DOWN);
+		boolean right = input.isKeyDown(KeyEvent.VK_LEFT);
+		boolean up = input.isKeyDown(KeyEvent.VK_LEFT);
+		boolean down = input.isKeyDown(KeyEvent.VK_LEFT);
 
 		moveSpeed = sanity * baseSpeed;
 
 		double targetX = x;
 		double targetY = y;
 
-		if (up) {
-			targetY -= moveSpeed;
-		} else if (down) {
-			targetY += moveSpeed;
-		} else if (left) {
+		if (left) {
 			targetX -= moveSpeed;
+			
 		} else if (right) {
 			targetX += moveSpeed;
 		}
 
-		Tile nextTile = main.level.getTile((int) targetX/Tile.tileSize , (int) targetY/Tile.tileSize);
-//		nextTile = null;
-		if (nextTile == null) {
-			updateX(targetX);
-			updateY(targetY);
-		} else if (!nextTile.solid) {
+		if (up) {
+			targetY -= moveSpeed;
+		} else if (down) {
+			targetY += moveSpeed;
+		}
+
+		if(!main.level.getTile(x/scale, y/scale).isSolid){
 			updateX(targetX);
 			updateY(targetY);
 		}
+		
 	}
-
-	public void updateX(double targetX) {
-		x = targetX;
+	
+	public void updateX(double targetX){
+		x=targetX;
 		// todo: send new x to Server
 	}
-
-	public void updateY(double targetY) {
-		y = targetY;
+	
+	public void updateY(double targetY){
+		y=targetY;
 		// todo: send new y to Server
 	}
 
 	public void render(Graphics2D g2) {
-		g2.drawImage(image, (int) ((x )-cam.xOffset), (int)(( y )-cam.yOffset), tileSize , tileSize , null);
+		g2.drawImage(image, (int) x * scale, (int) y * scale, tileSize * scale, tileSize * scale, null);
 	}
 }
