@@ -1,10 +1,14 @@
 package serverLogic;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
+import gameConfiguration.GameConfiguration;
 import globalClasses.Action;
 import globalClasses.ActionResponse;
 import globalClasses.Pos;
@@ -12,14 +16,23 @@ import globalClasses.StatContainer;
 
 public class Game {
 
-	private Stats stats;
-	private ArrayList<Interactable> machines;
+	private Collection<Interactable> machines;
+	private Collection<Room> rooms;
+	private Function<StatContainer, Double> speedFunction;
+	private HashMap<String, Player> players;
 
 	/** Creates a new game and starts the internal clock. */
-	public Game() {
+	public Game(GameConfiguration config) {
+		players = new HashMap<String, Player>();
+		rooms = config.getRooms();
+		machines = config.getMachines();
+		machines.forEach(m -> m.findRoom(rooms)); // Sets rooms the machines are in
+		speedFunction = config.getSpeedFunction();
+	}
+
+	public void start() {
 		new Clock();
-		stats = new Stats();
-		machines = new ArrayList<Interactable>();
+		(new Thread(() -> mainLoop())).start();
 	}
 
 	/** Update the position of a single player
@@ -27,7 +40,7 @@ public class Game {
 	 * @param playerId Id of the player
 	 * @param position new position */
 	public void updatePosition(String playerId, Pos position) {
-		stats.getPlayers().values().forEach(p -> p.updatePosition(position));
+		players.values().forEach(p -> p.updatePosition(position));
 	}
 	/** Execute an action as a player. Call this when a player sends a new action (not movement).
 	 * 
@@ -35,7 +48,7 @@ public class Game {
 	 * @param action
 	 * @return */
 	public Optional<ActionResponse> tryAction(String playerId, Action action) {
-		Player player = stats.getPlayers().get(playerId);
+		Player player = players.get(playerId);
 		switch (action) {
 			case NONE :
 				return Optional.empty();
@@ -60,7 +73,8 @@ public class Game {
 				if (machine.isPresent()) {
 					player.setMachine(machine.get());
 					double timeLeft = machine.get().startSabotaging(player);
-					return Optional.of(new ActionResponse(Optional.of(timeLeft), true));
+					if (timeLeft < 0) return Optional.of(new ActionResponse(Optional.empty(), false));
+					else return Optional.of(new ActionResponse(Optional.of(timeLeft), true));
 				} else {
 					return Optional.of(new ActionResponse(Optional.empty(), false));
 				}
@@ -74,7 +88,7 @@ public class Game {
 	/** Get a map of player id's to positions */
 	public Map<String, Pos> getAllPositions() {
 		Hashtable<String, Pos> res = new Hashtable<String, Pos>();
-		for (Player entry : stats.getPlayers().values()) {
+		for (Player entry : players.values()) {
 			res.put(entry.getId(), entry.getPosition());
 		}
 		return res;
@@ -83,13 +97,13 @@ public class Game {
 	 * 
 	 * @param id Id of that player */
 	public Optional<Pos> getPosition(String id) {
-		return stats.getPlayer(id).map(p -> p.getPosition());
+		return Optional.ofNullable(players.get(id)).map(p -> p.getPosition());
 	}
 
 	/** Get a map of player id's to their stats */
 	public Map<String, StatContainer> getAllStats() {
 		Hashtable<String, StatContainer> res = new Hashtable<String, StatContainer>();
-		for (Player entry : stats.getPlayers().values()) {
+		for (Player entry : players.values()) {
 			res.put(entry.getId(), entry.getStats());
 		}
 		return res;
@@ -99,16 +113,39 @@ public class Game {
 	 * @param id Player id
 	 * @return Stats for a player. Empty Optional if player doesn't exist. */
 	public Optional<StatContainer> getStats(String id) {
-		return stats.getPlayer(id).map(p -> p.getStats());
+		return Optional.ofNullable(players.get(id)).map(p -> p.getStats());
 	}
 
 	/** Add a new player
 	 * 
 	 * @param id Id of the new player */
 	public void newPlayer(String id) {
-		stats.addPlayer(id);
+		players.put(id, new Player(id, speedFunction));
 	}
 
+
+	private void mainLoop() {
+		try {
+			while (true) {
+				rooms.forEach(r -> r.update(players.values()));
+				if (players.values().stream().anyMatch(p -> p.getStats().isFinished())) break; // TODO Actual game ending condition
+				Thread.sleep(50);
+			}
+		} catch (InterruptedException ex) {
+			System.err.println("Main game loop interrupted with " + ex);
+		}
+	}
+
+
+
+	/** Add a new machine */
+	public void addMachine(Interactable machine) {
+		machines.add(machine);
+	}
+	/** Add all machines in a collection */
+	public void addMachines(Collection<Interactable> machines) {
+		machines.forEach(m -> addMachine(m));
+	}
 
 
 	/** Get the machine closest to a player

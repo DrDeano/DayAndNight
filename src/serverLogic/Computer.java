@@ -1,5 +1,6 @@
 package serverLogic;
 
+import gameConfiguration.MachineType;
 
 public class Computer extends Interactable {
 
@@ -11,11 +12,27 @@ public class Computer extends Interactable {
 
 
 
-	public Computer(double sabotageTime, double sabotageAmount, Player owner) {
-		super();
+	public Computer(int x, int y, int width, int height, double sabotageTime, double sabotageAmount, Player owner) {
+		super(x, y, width, height, MachineType.COMPUTER);
 		this.sabotageTime = sabotageTime;
 		this.sabotageAmount = sabotageAmount;
 		this.owner = owner;
+	}
+
+
+	public Computer(int x, int y, int width, int height, double sabotageTime, double sabotageAmount) {
+		super(x, y, width, height, MachineType.COMPUTER);
+		this.sabotageTime = sabotageTime;
+		this.sabotageAmount = sabotageAmount;
+	}
+	public Computer() {
+		this.sabotaged = false;
+		this.type = MachineType.COMPUTER;
+	}
+
+
+	public void assignOwner(Player player) {
+		this.owner = player;
 	}
 
 	@Override
@@ -37,9 +54,24 @@ public class Computer extends Interactable {
 		} catch (InterruptedException e) {}
 	}
 
+	private void processsSabotage() {
+		try {
+			while (!room.contains(owner)) {
+				Thread.sleep(50);
+			}
+			// TODO Add interrupting logic
+		} catch (InterruptedException ex) {
+			System.err.println("Sabotaging interrupted. " + ex);
+		}
+	}
+
 	@Override
 	public double startSabotaging(Player player) {
-		return sabotageTime;
+		if (room.contains(owner)) return -1;
+		else {
+			(new Thread(() -> processsSabotage())).start();
+			return sabotageTime;
+		}
 	}
 
 	@Override
