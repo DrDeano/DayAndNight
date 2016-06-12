@@ -73,14 +73,21 @@ public class Server {
 				ObjectInputStream from_client = new ObjectInputStream(client_socet.getInputStream());
 				
 				String client_name = "";
-				int lobby_index = 0;
 				try {
 					client_name = (String) from_client.readObject();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				
+				send_lobby_info(to_client);
+
+				int lobby_index = -1;
+				try {
 					lobby_index = (int) from_client.readObject();
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				}
-
+				
 				final String client_nameF = client_name;
 				boolean new_player = !server_lobbies.stream().anyMatch(l -> l.get_players().stream().anyMatch(p -> p.equals(client_nameF)));
 				
@@ -103,7 +110,6 @@ public class Server {
 							server_lobbies.get(lobby_index).add_player(client_name, to_client, from_client);
 						}	
 					}
-					send_lobby_info(to_client, lobby_index);
 				} else {
 					// Tell to client that there name already exists and choose
 					// another
@@ -117,7 +123,7 @@ public class Server {
 		}
 	}
 	
-	private static void send_lobby_info(ObjectOutputStream to_client, int lobby_index) {
+	private static void send_lobby_info(ObjectOutputStream to_client) {
 		try {
 			to_client.writeObject(new Packet("Main server", States.UPDATE_LOBBY, null));
 			to_client.flush();
@@ -128,9 +134,9 @@ public class Server {
 			for (ServerLobby lobby : server_lobbies) {
 				to_client.writeObject(lobby.get_players());
 				to_client.flush();
+				
+				to_client.writeObject(lobby.get_is_playing());
 			}
-			
-			to_client.writeObject(server_lobbies.get(lobby_index).get_is_playing());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
