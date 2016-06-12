@@ -10,6 +10,7 @@ import serverLogic.Stat;
 
 public class ConfigStorage {
 
+	/** Creates a simple game configuration to be used for testing */
 	public static GameConfiguration getTestConfiguration() {
 
 		// Speed at which progress is generated

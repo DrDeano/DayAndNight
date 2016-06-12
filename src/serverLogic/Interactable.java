@@ -2,15 +2,17 @@ package serverLogic;
 
 
 import java.awt.geom.Rectangle2D;
+import java.util.Collection;
 
 import gameConfiguration.MachineType;
 
 public abstract class Interactable {
 
+	public static final double interactionDistance = 1;
 
 	public MachineType type;
-	Rectangle2D.Double rectangle;
-	public static final double interactionDistance = 1;
+	protected Rectangle2D.Double rectangle;
+	private Room room;
 	protected boolean sabotaged;
 
 
@@ -39,6 +41,16 @@ public abstract class Interactable {
 		if (rectangle.getMinY() < y && y < rectangle.getMaxY()) dy = 0;
 
 		return dx + dy;
+	}
+
+	public Rectangle2D.Double getRectangle() {
+		return rectangle;
+	}
+	/** Find a room in which this machine is located. Computers must be in a room, for other machines it's optional.
+	 * 
+	 * @param rooms Collection with all rooms in the game. */
+	public void findRoom(Collection<Room> rooms) {
+		rooms.stream().filter(r -> r.contains(this)).findAny().ifPresent(r -> room = r);
 	}
 
 	abstract public double startUsing(Player player);

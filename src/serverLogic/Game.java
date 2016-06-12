@@ -2,6 +2,7 @@ package serverLogic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Optional;
@@ -15,15 +16,23 @@ import globalClasses.StatContainer;
 
 public class Game {
 
-	private Stats stats;
-	private ArrayList<Interactable> machines;
+	private Collection<Interactable> machines;
+	private Collection<Room> rooms;
 	private Function<StatContainer, Double> speedFunction;
+	private HashMap<String, Player> players;
 
 	/** Creates a new game and starts the internal clock. */
 	public Game(GameConfiguration config) {
-		stats = new Stats();
-		machines = new ArrayList<Interactable>();
+		players = new HashMap<String, Player>();
+		rooms = config.getRooms();
+		machines = config.getMachines();
+		machines.forEach(m -> m.findRoom(rooms)); // Sets rooms the machines are in
 		speedFunction = config.getSpeedFunction();
+	}
+
+	public void start() {
+		new Clock();
+		(new Thread(() -> mainLoop())).start();
 	}
 
 	/** Update the position of a single player
@@ -31,7 +40,7 @@ public class Game {
 	 * @param playerId Id of the player
 	 * @param position new position */
 	public void updatePosition(String playerId, Pos position) {
-		stats.getPlayers().values().forEach(p -> p.updatePosition(position));
+		players.values().forEach(p -> p.updatePosition(position));
 	}
 	/** Execute an action as a player. Call this when a player sends a new action (not movement).
 	 * 
@@ -39,7 +48,7 @@ public class Game {
 	 * @param action
 	 * @return */
 	public Optional<ActionResponse> tryAction(String playerId, Action action) {
-		Player player = stats.getPlayers().get(playerId);
+		Player player = players.get(playerId);
 		switch (action) {
 			case NONE :
 				return Optional.empty();
@@ -78,7 +87,7 @@ public class Game {
 	/** Get a map of player id's to positions */
 	public Map<String, Pos> getAllPositions() {
 		Hashtable<String, Pos> res = new Hashtable<String, Pos>();
-		for (Player entry : stats.getPlayers().values()) {
+		for (Player entry : players.values()) {
 			res.put(entry.getId(), entry.getPosition());
 		}
 		return res;
@@ -87,13 +96,13 @@ public class Game {
 	 * 
 	 * @param id Id of that player */
 	public Optional<Pos> getPosition(String id) {
-		return stats.getPlayer(id).map(p -> p.getPosition());
+		return Optional.ofNullable(players.get(id)).map(p -> p.getPosition());
 	}
 
 	/** Get a map of player id's to their stats */
 	public Map<String, StatContainer> getAllStats() {
 		Hashtable<String, StatContainer> res = new Hashtable<String, StatContainer>();
-		for (Player entry : stats.getPlayers().values()) {
+		for (Player entry : players.values()) {
 			res.put(entry.getId(), entry.getStats());
 		}
 		return res;
@@ -103,14 +112,27 @@ public class Game {
 	 * @param id Player id
 	 * @return Stats for a player. Empty Optional if player doesn't exist. */
 	public Optional<StatContainer> getStats(String id) {
-		return stats.getPlayer(id).map(p -> p.getStats());
+		return Optional.ofNullable(players.get(id)).map(p -> p.getStats());
 	}
 
 	/** Add a new player
 	 * 
 	 * @param id Id of the new player */
 	public void newPlayer(String id) {
-		stats.addPlayer(id, speedFunction);
+		players.put(id, new Player(id, speedFunction));
+	}
+
+
+	private void mainLoop() {
+		try {
+			while (true) {
+				rooms.forEach(r -> r.update(players.values()));
+				if (players.values().stream().anyMatch(p -> p.getStats().isFinished())) break; // TODO Actual game ending condition
+				Thread.sleep(50);
+			}
+		} catch (InterruptedException ex) {
+			System.err.println("Main game loop interrupted with " + ex);
+		}
 	}
 
 
