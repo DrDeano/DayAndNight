@@ -1,13 +1,12 @@
 package main;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 
-import ahmed.Level;
+import ahmed_Deficated.Level;
 
 public class Main extends JFrame {
 
@@ -20,6 +19,8 @@ public class Main extends JFrame {
 	public InputHandler input;
 	public Level level;
 	public static int width,height;
+	public static float ratio, tilesW, tilesH, widthpx, heightpx, diffX, diffY;
+	private static float deltas, moveSpeed = 80;
 
 	public static void main(String args[]) {
 		Main main = new Main();
@@ -28,7 +29,6 @@ public class Main extends JFrame {
 
 	public void run() {
 		initialise();
-		float deltas;
 		long minute = previousTime;
 		int loops = 0;
 		long time = previousTime + 1000000000l;
@@ -39,7 +39,6 @@ public class Main extends JFrame {
 			minute += deltaTime;
 			loops++;
 			if (minute >= time) {
-				System.out.println(loops);
 				time += 1000000000l;
 				loops = 0;
 			}
@@ -63,21 +62,51 @@ public class Main extends JFrame {
 		this.setVisible(true);
 		width = this.getWidth();
 		height = this.getHeight();
+		
+		ratio = (float)width / (float)height;
+		int tiles = 16;
+		if(height > width){
+			tilesH = tiles;
+			tilesW = ratio * (float)tiles;
+		}else{
+			tilesW = tiles;
+			tilesH = (float)tiles / ratio;
+		}
+		heightpx = (float)height / tilesH;
+		widthpx = (float)width / tilesW;
 		level = new Level(this);
 		level.init();
 	}
 
 	public void update(float deltaTime) {
+		if(input.isKeyDown(KeyEvent.VK_W) && input.isKeyDown(KeyEvent.VK_A)){
+			
+		}else if(input.isKeyDown(KeyEvent.VK_W) && input.isKeyDown(KeyEvent.VK_D)){
+			
+		}else if(input.isKeyDown(KeyEvent.VK_S) && input.isKeyDown(KeyEvent.VK_A)){
+			
+		}else if(input.isKeyDown(KeyEvent.VK_S) && input.isKeyDown(KeyEvent.VK_D)){
+			
+		}else if(input.isKeyDown(KeyEvent.VK_W)){
+			diffY -= moveSpeed * deltas;
+		}else if(input.isKeyDown(KeyEvent.VK_S)){
+			diffY += moveSpeed * deltas;
+		}else if(input.isKeyDown(KeyEvent.VK_A)){
+			diffX += moveSpeed * deltas;
+		}else if(input.isKeyDown(KeyEvent.VK_D)){
+			diffX -= moveSpeed * deltas;
+		}else{
+			
+		}
 		level.update();
 	}
 
 	public void draw() {
 
 		Graphics g = this.getGraphics();
-		Image offImage = this.createImage(this.getWidth(), this.getHeight());
+		Image offImage = this.createImage(width, height);
 		Graphics offGraphics = offImage.getGraphics();
-		level.render((Graphics2D) offGraphics);
-
+		level.draw(offGraphics);
 		g.drawImage(offImage, 0, 0, this.getWidth(), this.getHeight(), null);
 
 	}

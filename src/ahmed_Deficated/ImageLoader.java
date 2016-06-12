@@ -1,4 +1,4 @@
-package ahmed;
+package ahmed_Deficated;
 import java.awt.image.BufferedImage;
 
 import main.ResourceLoader;
