@@ -5,6 +5,7 @@ import java.util.function.Function;
 import globalClasses.StatContainer;
 import serverLogic.CoffeeMachine;
 import serverLogic.Computer;
+import serverLogic.Room;
 import serverLogic.Sofa;
 import serverLogic.Stat;
 
@@ -31,11 +32,14 @@ public class ConfigStorage {
 
 		// Computers: x, y, width, height, sabotage time, progress lost from sabotage
 		res.add(new Computer(5, 6, 1, 1, 15, 40));
+		res.add(new Computer(7, 6, 1, 1, 15, 40));
 
 		// Coffee machines: x, y, width, height, use time, sabotage time, coffee restored, coffee restored when sabotaged
 		res.add(new CoffeeMachine(15, 5, 2, 2, 20, 10, 70, 35));
 		res.add(new CoffeeMachine(12, 5, 2, 2, 10, 5, 40, 10));
 
+		res.add(new Room(4, 4, 7, 7));
+		res.add(new Room(12, 4, 6, 6));
 
 		return res;
 	}
