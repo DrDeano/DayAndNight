@@ -42,6 +42,11 @@ public class GameConfiguration {
 		rooms.add(room);
 	}
 
+	/** @return All of intractable objects */
+	public Collection<Interactable> getAllMachines() {
+		return machines;
+	}
+
 
 
 	public double getDayTime() {

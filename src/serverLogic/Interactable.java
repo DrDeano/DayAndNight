@@ -43,9 +43,7 @@ public abstract class Interactable {
 		return dx + dy;
 	}
 
-	public Rectangle2D.Double getRectangle() {
-		return rectangle;
-	}
+
 	/** Find a room in which this machine is located. Computers must be in a room, for other machines it's optional.
 	 * 
 	 * @param rooms Collection with all rooms in the game. */
@@ -63,6 +61,16 @@ public abstract class Interactable {
 		} catch (ClassCastException ex) {
 			return false;
 		}
+	}
+
+
+	/** @return The rectangle of the machine */
+	public Rectangle2D.Double getRectangle() {
+		return rectangle;
+	}
+	/** @return Type of the machine */
+	public MachineType getType() {
+		return type;
 	}
 
 	abstract public double startUsing(Player player);
