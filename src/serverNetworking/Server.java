@@ -17,7 +17,7 @@ import globalClasses.States;
 public class Server {
 
 //	public static ClientTable client_table = new ClientTable();
-	private static ArrayList<ServerLoby> server_lobbies = new ArrayList<ServerLoby>();
+	private static ArrayList<ServerLobby> server_lobbies = new ArrayList<ServerLobby>();
 	private static int lobby_count = -1;
 
 	/** The main method when the program first starts
@@ -37,7 +37,7 @@ public class Server {
 		// Initialise a server socket
 		ServerSocket server_socket = null;
 		
-		server_lobbies.add(new ServerLoby());
+		server_lobbies.add(new ServerLobby());
 		lobby_count++;
 		// Initialise the server port to listen on
 		int server_port = 0;
@@ -63,7 +63,7 @@ public class Server {
 				// Wait for a connection
 				// Stuck until somebody connects
 				Socket client_socet = server_socket.accept();
-
+				
 				// Be able to write to the client when starting the sender and
 				// receiver thread
 				ObjectOutputStream to_client = new ObjectOutputStream(client_socet.getOutputStream());
@@ -71,8 +71,7 @@ public class Server {
 				// When client connects be able to receive the name of the
 				// client
 				ObjectInputStream from_client = new ObjectInputStream(client_socet.getInputStream());
-
-				// Read the clients nickname
+				
 				String client_name = "";
 				int lobby_index = 0;
 				try {
@@ -82,14 +81,15 @@ public class Server {
 					e.printStackTrace();
 				}
 
-				if (client_table.getQueue(client_name) == null) { // New user
-					// Tell to client connection is successful
-					
+				final String client_nameF = client_name;
+				boolean new_player = !server_lobbies.stream().anyMatch(l -> l.get_players().stream().anyMatch(p -> p.equals(client_nameF)));
+				
+				if (new_player) { // New user
 					if (lobby_index > lobby_count) { // new lobby
 						to_client.writeObject(new Packet("Main server", States.INITIAL_CONNECT, new ClientConnect(true, true)));
 						to_client.flush();
 						
-						server_lobbies.add(new ServerLoby());
+						server_lobbies.add(new ServerLobby());
 						
 						server_lobbies.get(lobby_index).add_player(client_name, to_client, from_client);
 					} else {
@@ -103,6 +103,7 @@ public class Server {
 							server_lobbies.get(lobby_index).add_player(client_name, to_client, from_client);
 						}	
 					}
+					send_lobby_info(to_client);
 				} else {
 					// Tell to client that there name already exists and choose
 					// another
@@ -113,6 +114,23 @@ public class Server {
 		} catch (IOException e) {
 			server_socket.close();
 			System.err.println(e);
+		}
+	}
+	
+	private static void send_lobby_info(ObjectOutputStream to_client) {
+		try {
+			to_client.writeObject(new Packet("Main server", States.UPDATE_LOBBY, null));
+			to_client.flush();
+			
+			to_client.writeObject(lobby_count);
+			to_client.flush();
+			
+			for (ServerLobby lobby : server_lobbies) {
+				to_client.writeObject(lobby.get_players());
+				to_client.flush();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

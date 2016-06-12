@@ -11,12 +11,10 @@ public class ServerLobby implements Runnable {
 
 	private Game game;
 	private int number_of_players;
-	private ObjectOutputStream to_client;
-	private ObjectInputStream from_client;
 	private ClientTable client_table;
 	
 	public ServerLobby() {
-		game = new Game(ConfigStorage.getTestConfiguration());
+		game = new Game(ConfigStorage.getTestConfiguration(), this);
 		number_of_players = 0;
 		client_table = new ClientTable();
 	}
@@ -34,15 +32,12 @@ public class ServerLobby implements Runnable {
 		number_of_players++;
 		client_table.add(player, new PacketQueue());
 		game.newPlayer(player);
-		this.to_client = to_client;
-		this.from_client = from_client;
 		
 		// Create and start a new thread to write to the client:
 		ServerSender basicSender = new ServerSender(client_table.getQueue(player), to_client);
 		Thread sender = new Thread(basicSender);
 		sender.start();
 
-		Game game = new Game(ConfigStorage.getTestConfiguration(), this);
 		game.newPlayer(player);
 
 		// Create and start a new thread to read from the client
