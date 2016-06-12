@@ -12,11 +12,13 @@ public class ServerLobby implements Runnable {
 	private Game game;
 	private int number_of_players;
 	private ClientTable client_table;
+	private boolean is_playing;
 	
 	public ServerLobby() {
-		game = new Game(ConfigStorage.getTestConfiguration(), this);
+		game = new Game(ConfigStorage.getTestConfiguration(this));
 		number_of_players = 0;
 		client_table = new ClientTable();
+		is_playing = false;
 	}
 
 	@Override
@@ -41,7 +43,7 @@ public class ServerLobby implements Runnable {
 		game.newPlayer(player);
 
 		// Create and start a new thread to read from the client
-		Thread receiver = new Thread(new ServerReceiver(player, from_client, client_table, game));
+		Thread receiver = new Thread(new ServerReceiver(player, from_client, client_table, game, this));
 		receiver.start();
 	}
 	
@@ -51,5 +53,13 @@ public class ServerLobby implements Runnable {
 	
 	public void sendToClient(String clientName, Packet packet) {
 		client_table.getQueue(clientName).offer(packet);
+	}
+	
+	public void set_is_playing(boolean is_playing) {
+		this.is_playing = is_playing;
+	}
+	
+	public boolean get_is_playing() {
+		return is_playing;
 	}
 }
