@@ -18,11 +18,6 @@ public class CoffeeMachine extends Machine {
 		this.coffeeRestoredWhenSabotaged = coffeeRestoredWhenSabotaged;
 		super.sabotaged = false;
 	}
-	public CoffeeMachine() {
-		super();
-		this.sabotaged = false;
-		this.type = MachineType.COFFEE;
-	}
 
 	@Override
 	public double startUsing(Player player) {

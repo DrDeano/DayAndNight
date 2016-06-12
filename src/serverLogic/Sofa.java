@@ -19,10 +19,6 @@ public class Sofa extends Machine {
 		this.sanityRestoredWhenSabotaged = sanityRestoredWhenSabotaged;
 		this.sabotaged = false;
 	}
-	public Sofa() {
-		this.sabotaged = false;
-		this.type = MachineType.SOFA;
-	}
 
 	@Override
 	public double startUsing(Player player) {

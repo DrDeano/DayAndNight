@@ -1,11 +1,9 @@
 package gameConfiguration;
 
-import java.util.ArrayList;
-
 import serverLogic.CoffeeMachine;
 import serverLogic.Computer;
-import serverLogic.Sofa;
 import serverLogic.Pooltable;
+import serverLogic.Sofa;
 
 public enum MachineType {
 	COFFEE(CoffeeMachine.class), SOFA(Sofa.class), COMPUTER(Computer.class), POOL(Pooltable.class);

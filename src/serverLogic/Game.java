@@ -15,7 +15,6 @@ import globalClasses.Pos;
 import globalClasses.StatContainer;
 import globalClasses.States;
 import serverNetworking.Packet;
-import serverNetworking.Server;
 import serverNetworking.ServerLobby;
 
 public class Game {
@@ -192,6 +191,7 @@ public class Game {
 			}
 			final Player winnerF = winner;
 			players.values().forEach(p -> lobby.sendToClient(p.getId(), new Packet("Server", States.GAME_ENDED, p.equals(winnerF))));
+			lobby.set_is_playing(false);
 		} catch (InterruptedException ex) {
 			System.err.println("Main game loop interrupted with " + ex);
 		}
