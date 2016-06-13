@@ -5,11 +5,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import utils.ResourceLoader;
-
 public class Level {
 
-	public static int tileSize = 64;
+	public static int tileSize = 16;
 
 	Main main;
 
@@ -22,17 +20,18 @@ public class Level {
 
 	Player p;
 
-	public int getXSize(){
+	public int getMapWidth() {
 		return gridWidth * tileSize;
 	}
-	public int getYSize(){
+
+	public int getMapHeight() {
 		return gridHeight * tileSize;
 	}
-	
+
 	public Level(Main main) {
 		this.main = main;
 	}
-	
+
 	public void init() {
 
 		int[][] mapGridRGB = null;
@@ -93,13 +92,13 @@ public class Level {
 		Graphics g = floor.getGraphics();
 		Image floor = ResourceLoader.getImage("carpet.png");
 		Image walls = ResourceLoader.getImage("wallsprites.png");
-		BufferedImage wall = new BufferedImage(16,16,BufferedImage.TYPE_INT_RGB);
+		BufferedImage wall = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
 		Graphics g2 = wall.getGraphics();
-		g2.drawImage(walls, 0, 0, 16, 16,0,0,16,16, null);
-		
+		g2.drawImage(walls, 0, 0, 16, 16, 0, 0, 16, 16, null);
+		g.setColor(Color.GREEN);
+
 		for (int j = 0; j < gridHeight; j++) {
 			for (int i = 0; i < gridWidth; i++) {
-
 				switch (mapGridRGB[j][i]) {
 				case 0xFFA349A4:
 					g.drawImage(wall, i * tileSize, j * tileSize, tileSize, tileSize, null);
@@ -109,6 +108,9 @@ public class Level {
 				default:
 					g.drawImage(floor, i * tileSize, j * tileSize, tileSize, tileSize, null);
 					break;
+				}
+				if (i % 10 == 0 && j % 10 == 0) {
+					g.fillRect(i * tileSize, j * tileSize, tileSize, tileSize);
 				}
 
 			}
@@ -122,9 +124,10 @@ public class Level {
 
 	public void draw(Graphics g) {
 		g.setColor(Color.red);
-		g.drawRect(0,0,getXSize(),getYSize());
-		g.drawImage(floor, 0, 0, getXSize(), getYSize(), 0, 0,
-				floor.getWidth(null), floor.getHeight(null), null);
+		g.drawImage(floor, 0, 0, Main.width, Main.height, (int) -Main.zeroXCoord, (int) -Main.zeroYCoord,
+				(int) (Main.tilesW * tileSize - Main.zeroXCoord), (int) (Main.tilesH * tileSize - Main.zeroYCoord),
+				null);
+		g.drawRect( (int) Main.zeroXCoord / tileSize, (int) Main.zeroYCoord , (int) (10), (int) (10));
 	}
 
 }
