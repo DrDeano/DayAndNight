@@ -1,4 +1,4 @@
-package game;
+package game2.src.game;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -25,7 +25,7 @@ public class ResourceLoader {
 	 */
 	public static Image getImage(String path){
 		try{
-			URL url = rl.getClass().getClassLoader().getResource("resources/images/" + path);
+			URL url = rl.getClass().getClassLoader().getResource("game2/src/resources/images/" + path);
 			return new ImageIcon(url).getImage();
 		}catch (Exception e){
 			e.printStackTrace();
@@ -35,7 +35,7 @@ public class ResourceLoader {
 	
 	public static BufferedImage getBufferedImage(String path) {
 		try {
-			return ImageIO.read(ResourceLoader.class.getResource("resources/images/" + path));
+			return ImageIO.read(ResourceLoader.class.getResource("game2/src/resources/images/" + path));
 		} catch (IOException e) {
 			System.out.println("failed to load");
 			e.printStackTrace();
@@ -90,7 +90,7 @@ public class ResourceLoader {
 	 */
 	public static AudioInputStream getSound(String path){
 		try {
-			URL url = rl.getClass().getClassLoader().getResource("resources/sound/" + path);
+			URL url = rl.getClass().getClassLoader().getResource("game2/src/resources/sound/" + path);
 			return AudioSystem.getAudioInputStream(url);
 		} catch (Exception e) {
 			e.printStackTrace();

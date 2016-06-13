@@ -1,4 +1,4 @@
-package game;
+package game2.src.game;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -30,7 +30,7 @@ public class Map {
 		
 		BufferedImage level = new BufferedImage(Main.width, Main.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = level.getGraphics();
-		g.setColor(new Color(0xFFdd,0xFFa3,0xFF3d));
+		//g.setColor(new Color(0xFFdd,0xFFa3,0xFF3d));
 		
 	}
 	

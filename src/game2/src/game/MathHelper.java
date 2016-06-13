@@ -1,4 +1,4 @@
-package game;
+package game2.src.game;
 
 import java.awt.geom.Point2D;
 import java.util.Random;
