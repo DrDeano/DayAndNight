@@ -25,6 +25,13 @@ public class Map {
 	private float healthRatio = 1;
 	private long timer;
 
+	// Wave stuff
+	private int zombiesPerSecond = 2;
+	private int zombieHealth = 100;
+	private int waveDuration = 15000;
+	private int waveDurationLeft = waveDuration;
+
+
 	public Map() {
 		init();
 	}
@@ -37,8 +44,7 @@ public class Map {
 		enemyLocations = new ArrayList<Rectangle>();
 		for (int i = 0; i < numOfEnemies; i++) {
 			enemies.add(new Enemy());
-			enemyLocations.add(new Rectangle((int) enemies.get(i).getLocation().x - 16,
-					(int) enemies.get(i).getLocation().y - 16, 32, 32));
+			enemyLocations.add(new Rectangle((int) enemies.get(i).getLocation().x - 16, (int) enemies.get(i).getLocation().y - 16, 32, 32));
 		}
 		trajectories = new ArrayList<Point2D.Double>();
 		shots = new ArrayList<Line2D.Double>();
@@ -71,10 +77,18 @@ public class Map {
 	private void spawn() {
 		if (System.currentTimeMillis() >= timer) {
 			Enemy e = new Enemy();
+			e.health = zombieHealth;
 			enemies.add(e);
 			enemyLocations.add(new Rectangle((int) enemies.get(enemies.indexOf(e)).getLocation().x - 16,
-					(int) enemies.get(enemies.indexOf(e)).getLocation().y - 16, 32, 32));
-			timer += 500;
+				(int) enemies.get(enemies.indexOf(e)).getLocation().y - 16, 32, 32));
+			timer += 1000 / zombiesPerSecond + 1;
+			waveDurationLeft -= 1000 / zombiesPerSecond + 1;
+			if (waveDurationLeft < 0) {
+				waveDurationLeft = waveDuration;
+				if (zombiesPerSecond >= 5) zombiesPerSecond *= 1.2;
+				else zombiesPerSecond++;
+				zombieHealth *= 1.2;
+			}
 		}
 	}
 
@@ -83,7 +97,7 @@ public class Map {
 		shots.add(new Line2D.Double(player.location.x, player.location.y, player.location.x, player.location.y));
 		double speed = 20.0;
 		trajectories.add(MathHelper.getPoint(new Point2D.Double(player.location.x, player.location.y),
-				new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
+			new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
 
 	}
 
@@ -96,11 +110,9 @@ public class Map {
 		for (int i = 0; i < enemies.size(); i++) {
 
 			if (enemies.get(i).isAlive()) {
-				enemyLocations.get(i).setLocation((int) enemies.get(i).getLocation().x - 16,
-						(int) enemies.get(i).getLocation().y - 16);
+				enemyLocations.get(i).setLocation((int) enemies.get(i).getLocation().x - 16, (int) enemies.get(i).getLocation().y - 16);
 				for (int j = 0; j < shots.size(); j++) {
-					if (enemyLocations.get(i).contains(shots.get(j).getP1())
-							|| enemyLocations.get(i).contains(shots.get(j).getP2())) {
+					if (enemyLocations.get(i).contains(shots.get(j).getP1()) || enemyLocations.get(i).contains(shots.get(j).getP2())) {
 						enemies.get(i).takeDamage(player.damage);
 						shots.remove(j);
 						trajectories.remove(j);
@@ -117,8 +129,8 @@ public class Map {
 
 		for (int i = 0; i < shots.size(); i++) {
 
-			shots.get(i).setLine(shots.get(i).getX1() + trajectories.get(i).getX(),
-					shots.get(i).getY1() + trajectories.get(i).getY(), shots.get(i).getX1(), shots.get(i).getY1());
+			shots.get(i).setLine(shots.get(i).getX1() + trajectories.get(i).getX(), shots.get(i).getY1() + trajectories.get(i).getY(),
+				shots.get(i).getX1(), shots.get(i).getY1());
 		}
 		Rectangle rect = new Rectangle(0, 0, Main.width, Main.height);
 		for (int i = 0; i < shots.size(); i++) {
@@ -140,8 +152,7 @@ public class Map {
 	public void draw(Graphics g) {
 		g.drawImage(background, 0, 0, Main.width, Main.height, null);
 		for (int i = 0; i < shots.size(); i++) {
-			g.drawLine((int) shots.get(i).getX1(), (int) shots.get(i).getY1(), (int) shots.get(i).getX2(),
-					(int) shots.get(i).getY2());
+			g.drawLine((int) shots.get(i).getX1(), (int) shots.get(i).getY1(), (int) shots.get(i).getX2(), (int) shots.get(i).getY2());
 		}
 		for (Enemy enemy : enemies) {
 			enemy.draw(g);
