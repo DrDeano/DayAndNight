@@ -25,6 +25,12 @@ public class Map {
 	private float healthRatio = 1;
 	private long timer;
 
+	// Wave stuff
+	private int zombiesPerSecond = 2;
+	private int zombieHealth = 100;
+	private int waveDuration = 15000;
+	private int waveDurationLeft = waveDuration;
+
 	public Map() {
 		init();
 	}
@@ -69,13 +75,26 @@ public class Map {
 	}
 
 	private void spawn() {
-		if (System.currentTimeMillis() >= timer) {
+		if (waveDurationLeft < 0 && System.currentTimeMillis() >= timer) {
 			Enemy e = new Enemy(player);
+			e.health = zombieHealth;
 			enemies.add(e);
 			enemyLocations.add(new Rectangle((int) enemies.get(enemies.indexOf(e)).getLocation().x - 16,
 					(int) enemies.get(enemies.indexOf(e)).getLocation().y - 16, 32, 32));
-			timer += 500;
+			timer += 1000 / zombiesPerSecond + 1;
+			waveDurationLeft -= 1000 / zombiesPerSecond + 1;
+			if (waveDurationLeft < 0) {
+				if (zombiesPerSecond >= 5)
+					zombiesPerSecond *= 1.2;
+				else
+					zombiesPerSecond++;
+				zombieHealth *= 1.2;
+			}
 		}
+	}
+
+	public void newWave() {
+		waveDurationLeft = waveDuration;
 	}
 
 	public void shoot(Point mouseCoord) {
@@ -86,9 +105,9 @@ public class Map {
 				new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
 
 	}
-	
-	public void playerDamage(){
-		
+
+	public void playerDamage() {
+
 	}
 
 	public void update() {

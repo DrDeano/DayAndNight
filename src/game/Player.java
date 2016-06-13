@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -11,6 +12,7 @@ import java.awt.geom.Point2D;
 public class Player {
 
 	public Point2D.Double location;
+	public Rectangle hitBox;
 	private Image picture;
 	private int playArea = 8;
 	private float angle;
@@ -21,6 +23,7 @@ public class Player {
 
 		picture = ResourceLoader.getImage("player.png");
 		location = new Point2D.Double(Main.width/2, Main.height/2);
+		hitBox = new Rectangle((Main.width/2), (Main.height/2), 32, 32);
 		angle = 0;
 		maxHealth = 100;
 		health = maxHealth;
@@ -135,6 +138,7 @@ public class Player {
 		
 		mouse = Main.input.getMousePositionOnScreen();
 		angle = (float)MathHelper.getAngle(new Point((int)location.x, (int)location.y),mouse);
+		hitBox.setLocation((int)location.x, (int)location.y);
 		
 	}
 
