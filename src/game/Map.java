@@ -105,15 +105,23 @@ public class Map {
 		double speed = 20.0;
 		trajectories.add(MathHelper.getPoint(new Point2D.Double(player.location.x, player.location.y),
 			new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
-
+		Sound.gunshot.play();
 	}
 
 	public void playerDamage() {
 
+		for (int i = 0; i < enemies.size(); i++) {
+			if (enemyLocations.get(i).intersects(player.hitBox) && System.currentTimeMillis() > enemies.get(i).attackTimer) {
+				player.damage(25);
+				enemies.get(i).attackTimer = System.currentTimeMillis() + 1000;
+			}
+		}
 	}
 
 	public void update() {
+		playerDamage();
 		spawn();
+		player.update();
 		if (Main.input.isMouseDown(MouseEvent.BUTTON1)) {
 			shoot(Main.input.getMousePositionOnScreen());
 		}
@@ -154,7 +162,6 @@ public class Map {
 		for (Enemy enemy : enemies) {
 			enemy.update();
 		}
-		player.update();
 
 		healthRatio = (player.health / player.maxHealth) * 1000f;
 

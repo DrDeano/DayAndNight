@@ -14,6 +14,7 @@ public class Enemy {
 	public int health;
 	public float speed = 2f, angle;
 	private Player p;
+	public long attackTimer;
 
 	public Enemy(Player p) {
 		this.p = p;
@@ -21,6 +22,7 @@ public class Enemy {
 		picture = ResourceLoader.getImage("enemy.png");
 		location = new Point2D.Double(Main.random.nextInt(Main.width), Main.random.nextInt(Main.height - 256) + 256);
 		speed += Main.random.nextGaussian() * 0.25;
+		attackTimer = System.currentTimeMillis() + 1000;
 	}
 
 	public Point2D.Double getLocation() {
@@ -33,10 +35,10 @@ public class Enemy {
 
 	public boolean isAlive() {
 		if (health >= 0) {
-			if(Main.random.nextDouble() >0.8){
-				p.points++;
-			}
 			return true;
+		}
+		if (Main.random.nextDouble() > 0.8) {
+			p.points++;
 		}
 		return false;
 	}
