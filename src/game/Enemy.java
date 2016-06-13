@@ -10,9 +10,9 @@ import java.awt.geom.Point2D;
 public class Enemy {
 
 	private Point2D.Double location;
-	private int health;
 	private Image picture;
-	private float speed = 2f, angle;
+	public int health;
+	public float speed = 2f, angle;
 
 	public Enemy() {
 		health = 100;
@@ -25,14 +25,15 @@ public class Enemy {
 		return location;
 	}
 	
-	public boolean takeDamage(int damage) {
+	public void takeDamage(int damage) {
 		health -= damage;
-		if (health <= 0) {
-			return true;
-		}
-		return false;
 	}
 
+	public boolean isAlive(){
+	
+		return health <= 0;
+	}
+	
 	public void update() {
 
 		angle = (float) MathHelper.getAngle(new Point((int) location.x, (int) location.y),

@@ -14,15 +14,16 @@ import java.util.ArrayList;
 public class Map {
 
 	private BufferedImage background;
-	private Enemy[] enemies;
+	private ArrayList<Enemy> enemies;
 	private Player player;
-	private Rectangle[] enemyLocations;
+	private ArrayList<Rectangle> enemyLocations;
 
 	private ArrayList<Point2D.Double> trajectories;
 	private ArrayList<Line2D.Double> shots;
 
 	private int numOfEnemies = 20;
 	private float healthRatio = 1;
+	private long timer;
 
 	public Map() {
 		init();
@@ -32,9 +33,12 @@ public class Map {
 
 		player = new Player();
 
-		enemies = new Enemy[numOfEnemies];
+		enemies = new ArrayList<Enemy>();
+		enemyLocations = new ArrayList<Rectangle>();
 		for (int i = 0; i < numOfEnemies; i++) {
-			enemies[i] = new Enemy();
+			enemies.add(new Enemy());
+			enemyLocations.add(new Rectangle((int) enemies.get(i).getLocation().x - 16,
+					(int) enemies.get(i).getLocation().y - 16, 32, 32));
 		}
 		trajectories = new ArrayList<Point2D.Double>();
 		shots = new ArrayList<Line2D.Double>();
@@ -45,22 +49,33 @@ public class Map {
 		g.setColor(new Color(0x04, 0xac, 0x1c));
 		g.fillRect(0, 0, Main.width, 256);
 		Image shrub = ResourceLoader.getImage("shrub.png");
-		for (int i = 0; i < Main.random.nextInt(10)+5; i++) {
+		for (int i = 0; i < Main.random.nextInt(10) + 5; i++) {
 			g.drawImage(shrub, Main.random.nextInt(Main.width), Main.random.nextInt(Main.height), null);
 		}
 		Image house1 = ResourceLoader.getImage("house1.png");
 		Image house2 = ResourceLoader.getImage("house2.png");
 		int x = 0;
-		while(x < Main.width){
-			if(Main.random.nextBoolean()){
+		while (x < Main.width) {
+			if (Main.random.nextBoolean()) {
 				g.drawImage(house1, x, 128, null);
-				x+=256;
-			}else{
+				x += 256;
+			} else {
 				g.drawImage(house2, x, 0, null);
-				x+=512;
+				x += 512;
 			}
 		}
+		timer = System.currentTimeMillis() + 1000;
 
+	}
+
+	private void spawn() {
+		if (System.currentTimeMillis() >= timer) {
+			Enemy e = new Enemy();
+			enemies.add(e);
+			enemyLocations.add(new Rectangle((int) enemies.get(enemies.indexOf(e)).getLocation().x - 16,
+					(int) enemies.get(enemies.indexOf(e)).getLocation().y - 16, 32, 32));
+			timer += 500;
+		}
 	}
 
 	public void shoot(Point mouseCoord) {
@@ -73,11 +88,33 @@ public class Map {
 	}
 
 	public void update() {
-
-		if(Main.input.isMouseDown(MouseEvent.BUTTON1)){
+		spawn();
+		if (Main.input.isMouseDown(MouseEvent.BUTTON1)) {
 			shoot(Main.input.getMousePositionOnScreen());
 		}
-		
+
+		for (int i = 0; i < enemies.size(); i++) {
+
+			if (enemies.get(i).isAlive()) {
+				enemyLocations.get(i).setLocation((int) enemies.get(i).getLocation().x - 16,
+						(int) enemies.get(i).getLocation().y - 16);
+				for (int j = 0; j < shots.size(); j++) {
+					if (enemyLocations.get(i).contains(shots.get(j).getP1())
+							|| enemyLocations.get(i).contains(shots.get(j).getP2())) {
+						enemies.get(i).takeDamage(player.damage);
+						shots.remove(j);
+						trajectories.remove(j);
+						if (!enemies.get(i).isAlive()) {
+							enemyLocations.remove(i);
+							enemies.remove(i);
+							i--;
+							break;
+						}
+					}
+				}
+			}
+		}
+
 		for (int i = 0; i < shots.size(); i++) {
 
 			shots.get(i).setLine(shots.get(i).getX1() + trajectories.get(i).getX(),
@@ -95,24 +132,25 @@ public class Map {
 			enemy.update();
 		}
 		player.update();
-		
+
 		healthRatio = (player.health / player.maxHealth) * 1000f;
-		
+
 	}
 
 	public void draw(Graphics g) {
 		g.drawImage(background, 0, 0, Main.width, Main.height, null);
-		for(int i = 0; i< shots.size(); i++){
-			g.drawLine((int)shots.get(i).getX1(),(int)shots.get(i).getY1(),(int)shots.get(i).getX2(),(int)shots.get(i).getY2());
+		for (int i = 0; i < shots.size(); i++) {
+			g.drawLine((int) shots.get(i).getX1(), (int) shots.get(i).getY1(), (int) shots.get(i).getX2(),
+					(int) shots.get(i).getY2());
 		}
 		for (Enemy enemy : enemies) {
 			enemy.draw(g);
 		}
 		player.draw(g);
 		g.setColor(Color.red);
-		g.fillRect(Main.width/2 - 500, 50, 1000, 20);
+		g.fillRect(Main.width / 2 - 500, 50, 1000, 20);
 		g.setColor(Color.green);
-		g.fillRect(Main.width/2 + 500 - (int)healthRatio, 50, (int)healthRatio, 20);
+		g.fillRect(Main.width / 2 + 500 - (int) healthRatio, 50, (int) healthRatio, 20);
 	}
 
 }
