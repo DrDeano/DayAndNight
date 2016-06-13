@@ -28,11 +28,12 @@ public class Map {
 	// Wave stuff
 	private int zombiesPerSecond = 2;
 	private int zombieHealth = 100;
-	private int waveDuration = 15000;
-	private int waveDurationLeft = waveDuration;
 	private long shotsound = 0;
 
-	private long shottimer = 200;
+	private long shottimer = 100;
+	private static int waveDuration = 15000;
+	private static int waveDurationLeft = waveDuration;
+	private static boolean upgradesOpened = false;
 
 	public Map() {
 		init();
@@ -44,11 +45,6 @@ public class Map {
 
 		enemies = new ArrayList<Enemy>();
 		enemyLocations = new ArrayList<Rectangle>();
-		for (int i = 0; i < numOfEnemies; i++) {
-			enemies.add(new Enemy(player));
-			enemyLocations.add(new Rectangle((int) enemies.get(i).getLocation().x - 16,
-					(int) enemies.get(i).getLocation().y - 16, 32, 32));
-		}
 		trajectories = new ArrayList<Point2D.Double>();
 		shots = new ArrayList<Line2D.Double>();
 		background = new BufferedImage(Main.width, Main.height, BufferedImage.TYPE_INT_ARGB);
@@ -78,26 +74,28 @@ public class Map {
 	}
 
 	private void spawn() {
-		if (waveDurationLeft < 0 && System.currentTimeMillis() >= timer) {
+		if (waveDurationLeft > 0 && System.currentTimeMillis() >= timer) {
 			Enemy e = new Enemy(player);
 			e.health = zombieHealth;
 			enemies.add(e);
 			enemyLocations.add(new Rectangle((int) enemies.get(enemies.indexOf(e)).getLocation().x - 16,
-					(int) enemies.get(enemies.indexOf(e)).getLocation().y - 16, 32, 32));
+				(int) enemies.get(enemies.indexOf(e)).getLocation().y - 16, 32, 32));
 			timer += 1000 / zombiesPerSecond + 1;
 			waveDurationLeft -= 1000 / zombiesPerSecond + 1;
 			if (waveDurationLeft < 0) {
-				if (zombiesPerSecond >= 5)
-					zombiesPerSecond *= 1.2;
-				else
-					zombiesPerSecond++;
+				if (zombiesPerSecond >= 5) zombiesPerSecond *= 1.2;
+				else zombiesPerSecond++;
 				zombieHealth *= 1.2;
 			}
+		} else if (waveDurationLeft <= 0 && !upgradesOpened && !enemies.stream().anyMatch(e -> e.health > 0)) {
+			new Upgrades(player);
+			upgradesOpened = true;
 		}
 	}
 
-	public void newWave() {
+	public static void newWave() {
 		waveDurationLeft = waveDuration;
+		upgradesOpened = false;
 	}
 
 	public void shoot(Point mouseCoord) {
@@ -137,11 +135,9 @@ public class Map {
 		for (int i = 0; i < enemies.size(); i++) {
 
 			if (enemies.get(i).isAlive()) {
-				enemyLocations.get(i).setLocation((int) enemies.get(i).getLocation().x - 16,
-						(int) enemies.get(i).getLocation().y - 16);
+				enemyLocations.get(i).setLocation((int) enemies.get(i).getLocation().x - 16, (int) enemies.get(i).getLocation().y - 16);
 				for (int j = 0; j < shots.size(); j++) {
-					if (enemyLocations.get(i).contains(shots.get(j).getP1())
-							|| enemyLocations.get(i).contains(shots.get(j).getP2())) {
+					if (enemyLocations.get(i).contains(shots.get(j).getP1()) || enemyLocations.get(i).contains(shots.get(j).getP2())) {
 						enemies.get(i).takeDamage(player.damage);
 						shots.remove(j);
 						trajectories.remove(j);
@@ -158,8 +154,8 @@ public class Map {
 
 		for (int i = 0; i < shots.size(); i++) {
 
-			shots.get(i).setLine(shots.get(i).getX1() + trajectories.get(i).getX(),
-					shots.get(i).getY1() + trajectories.get(i).getY(), shots.get(i).getX1(), shots.get(i).getY1());
+			shots.get(i).setLine(shots.get(i).getX1() + trajectories.get(i).getX(), shots.get(i).getY1() + trajectories.get(i).getY(),
+				shots.get(i).getX1(), shots.get(i).getY1());
 		}
 		Rectangle rect = new Rectangle(0, 0, Main.width, Main.height);
 		for (int i = 0; i < shots.size(); i++) {
@@ -180,8 +176,7 @@ public class Map {
 	public void draw(Graphics g) {
 		g.drawImage(background, 0, 0, Main.width, Main.height, null);
 		for (int i = 0; i < shots.size(); i++) {
-			g.drawLine((int) shots.get(i).getX1(), (int) shots.get(i).getY1(), (int) shots.get(i).getX2(),
-					(int) shots.get(i).getY2());
+			g.drawLine((int) shots.get(i).getX1(), (int) shots.get(i).getY1(), (int) shots.get(i).getX2(), (int) shots.get(i).getY2());
 		}
 		for (Enemy enemy : enemies) {
 			enemy.draw(g);
@@ -191,7 +186,6 @@ public class Map {
 		g.fillRect(Main.width / 2 - 500, 50, 1000, 20);
 		g.setColor(Color.green);
 		g.fillRect(Main.width / 2 + 500 - (int) healthRatio, 50, (int) healthRatio, 20);
-		System.out.println(healthRatio + "," + player.health + "," + player.maxHealth);
 	}
 
 }
