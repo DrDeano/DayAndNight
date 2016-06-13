@@ -1,4 +1,4 @@
-package game2.src.game;
+package game;
 
 import java.awt.Component;
 import java.awt.Dimension;

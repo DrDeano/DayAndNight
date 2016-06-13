@@ -1,8 +1,9 @@
-package game2.src.game;
+package game;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -15,6 +16,7 @@ public class Main extends JFrame {
 	private static long currentTime, previousTime, deltaTime;
 
 	public static InputHandler input;
+	public static Random random;
 	public static int width, height;
 	public static float ratio, tilesW, tilesH, widthpx, heightpx, zeroXCoord, zeroYCoord,
 			root2 = (float) Math.sqrt(2.0);
@@ -43,6 +45,7 @@ public class Main extends JFrame {
 	public void initialise() {
 		running = true;
 		input = new InputHandler(this);
+		random = new Random();
 		previousTime = System.nanoTime();
 		FPS = this.getGraphicsConfiguration().getDevice().getDisplayMode().getRefreshRate();
 		SPF = 1f / FPS;
