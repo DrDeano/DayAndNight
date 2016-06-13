@@ -15,6 +15,7 @@ public class Upgrades extends Frame {
 	private static final long serialVersionUID = 10L;
 
 	public Upgrades(Player player) {
+		player.points = 20;
 		setTitle("Upgrades");
 		setSize(350, 300);
 		setVisible(true);
@@ -143,12 +144,12 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				player.points--;
-				player.health = player.maxHealth;
-				upgrade_points.setText("Point left: " + player.points);
-				hp_lv.setText("" + (((double) player.health / (double) player.maxHealth) * 100));
-				
+				if (((double) player.health / (double) player.maxHealth) < 1) {
+					player.points--;
+					player.health = player.maxHealth;
+					upgrade_points.setText("Point left: " + player.points);
+					hp_lv.setText("" + (((double) player.health / (double) player.maxHealth) * 100));
+				}
 			}
 		});
 
@@ -156,11 +157,10 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				player.points--;
+				player.speed++;
 				upgrade_points.setText("Point left: " + player.points);
 				speed_lv.setText("" + player.speed);
-				player.speed++;
 			}
 		});
 
@@ -168,7 +168,6 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				player.points--;
 				player.accuracy++;
 				upgrade_points.setText("Point left: " + player.points);
@@ -180,7 +179,6 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				player.points--;
 				player.damage++;
 				upgrade_points.setText("Point left: " + player.points);
@@ -192,7 +190,6 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				player.points--;
 				player.rateOfFire++;
 				upgrade_points.setText("Point left: " + player.points);
@@ -204,7 +201,6 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				player.points--;
 				player.maxHealth += 50;
 				upgrade_points.setText("Point left: " + player.points);
