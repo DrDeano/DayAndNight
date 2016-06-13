@@ -30,6 +30,7 @@ public class Map {
 	private int zombieHealth = 100;
 	private static int waveDuration = 15000;
 	private static int waveDurationLeft = waveDuration;
+	private static boolean upgradesOpened = false;
 
 	public Map() {
 		init();
@@ -87,13 +88,15 @@ public class Map {
 				else zombiesPerSecond++;
 				zombieHealth *= 1.2;
 			}
-		} else if (waveDurationLeft <= 0 && !enemies.stream().anyMatch(e -> e.health > 0)) {
+		} else if (waveDurationLeft <= 0 && !upgradesOpened && !enemies.stream().anyMatch(e -> e.health > 0)) {
 			new Upgrades(player);
+			upgradesOpened = true;
 		}
 	}
 
 	public static void newWave() {
 		waveDurationLeft = waveDuration;
+		upgradesOpened = false;
 	}
 
 	public void shoot(Point mouseCoord) {
