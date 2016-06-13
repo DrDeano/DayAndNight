@@ -30,8 +30,7 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
-
+				Map.newWave();
 			}
 
 			@Override
@@ -135,6 +134,7 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Map.newWave();
 				System.exit(0);
 			}
 		});

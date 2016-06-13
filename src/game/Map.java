@@ -28,8 +28,8 @@ public class Map {
 	// Wave stuff
 	private int zombiesPerSecond = 2;
 	private int zombieHealth = 100;
-	private int waveDuration = 15000;
-	private int waveDurationLeft = waveDuration;
+	private static int waveDuration = 15000;
+	private static int waveDurationLeft = waveDuration;
 
 
 	public Map() {
@@ -75,7 +75,7 @@ public class Map {
 	}
 
 	private void spawn() {
-		if (waveDurationLeft < 0 && System.currentTimeMillis() >= timer) {
+		if (waveDurationLeft > 0 && System.currentTimeMillis() >= timer) {
 			Enemy e = new Enemy();
 			e.health = zombieHealth;
 			enemies.add(e);
@@ -88,10 +88,12 @@ public class Map {
 				else zombiesPerSecond++;
 				zombieHealth *= 1.2;
 			}
+		} else if (waveDurationLeft <= 0 && !enemies.stream().anyMatch(e -> e.health > 0)) {
+			new Upgrades(player);
 		}
 	}
 
-	public void newWave() {
+	public static void newWave() {
 		waveDurationLeft = waveDuration;
 	}
 
