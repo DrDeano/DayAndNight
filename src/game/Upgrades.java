@@ -15,7 +15,6 @@ public class Upgrades extends Frame {
 	private static final long serialVersionUID = 10L;
 
 	public Upgrades(Player player) {
-		player.points = 20;
 		setTitle("Upgrades");
 		setSize(350, 300);
 		setVisible(true);
@@ -25,13 +24,12 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				System.exit(0);
+				e.getWindow().dispose();
 			}
 
 			@Override
 			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
-
+				Map.newWave();
 			}
 
 			@Override
@@ -129,21 +127,22 @@ public class Upgrades extends Frame {
 		add(max_health_lv);
 		add(max_health_b);
 
-		Button close = new Button("Close");
-		close.setBounds(250, 240, 60, 30);
-		close.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		add(close);
+		/* Button close = new Button("Close");
+		 * close.setBounds(250, 240, 60, 30);
+		 * close.addActionListener(new ActionListener() {
+		 * 
+		 * @Override
+		 * public void actionPerformed(ActionEvent e) {
+		 * Map.newWave();
+		 * }
+		 * });
+		 * add(close); */
 
 		hp_b.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (player.points <= 0) return;
 				if (((double) player.health / (double) player.maxHealth) < 1) {
 					player.points--;
 					player.health = player.maxHealth;
@@ -157,6 +156,7 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (player.points <= 0) return;
 				player.points--;
 				player.speed++;
 				upgrade_points.setText("Point left: " + player.points);
@@ -168,6 +168,7 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (player.points <= 0) return;
 				player.points--;
 				player.accuracy++;
 				upgrade_points.setText("Point left: " + player.points);
@@ -179,6 +180,7 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (player.points <= 0) return;
 				player.points--;
 				player.damage++;
 				upgrade_points.setText("Point left: " + player.points);
@@ -190,6 +192,7 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (player.points <= 0) return;
 				player.points--;
 				player.rateOfFire++;
 				upgrade_points.setText("Point left: " + player.points);
@@ -201,6 +204,7 @@ public class Upgrades extends Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (player.points <= 0) return;
 				player.points--;
 				player.maxHealth += 50;
 				upgrade_points.setText("Point left: " + player.points);
