@@ -1,4 +1,4 @@
-package src.game;
+package game;
 import java.awt.Button;
 import java.awt.Frame;
 import java.awt.Label;
