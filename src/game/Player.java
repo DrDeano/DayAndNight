@@ -25,7 +25,7 @@ public class Player {
 		location = new Point2D.Double(Main.width/2, Main.height/2);
 		hitBox = new Rectangle((Main.width/2), (Main.height/2), 32, 32);
 		angle = 0;
-		maxHealth = 100;
+		maxHealth = 1000;
 		health = maxHealth;
 		speed = 3;
 		accuracy = 50;
@@ -40,6 +40,10 @@ public class Player {
 		return location;
 	}
 
+	public void damage(int damage){
+		health -= damage;
+	}
+	
 	public void setLocation(Point2D.Double location) {
 		this.location = location;
 	}
