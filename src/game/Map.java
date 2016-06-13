@@ -75,7 +75,7 @@ public class Map {
 	}
 
 	private void spawn() {
-		if (System.currentTimeMillis() >= timer) {
+		if (waveDurationLeft < 0 && System.currentTimeMillis() >= timer) {
 			Enemy e = new Enemy();
 			e.health = zombieHealth;
 			enemies.add(e);
@@ -84,12 +84,15 @@ public class Map {
 			timer += 1000 / zombiesPerSecond + 1;
 			waveDurationLeft -= 1000 / zombiesPerSecond + 1;
 			if (waveDurationLeft < 0) {
-				waveDurationLeft = waveDuration;
 				if (zombiesPerSecond >= 5) zombiesPerSecond *= 1.2;
 				else zombiesPerSecond++;
 				zombieHealth *= 1.2;
 			}
 		}
+	}
+
+	public void newWave() {
+		waveDurationLeft = waveDuration;
 	}
 
 	public void shoot(Point mouseCoord) {
