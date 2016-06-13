@@ -13,34 +13,41 @@ public class Enemy {
 	private Image picture;
 	public int health;
 	public float speed = 2f, angle;
+	private Player p;
 
-	public Enemy() {
+	public Enemy(Player p) {
+		this.p = p;
 		health = 100;
 		picture = ResourceLoader.getImage("enemy.png");
-		location = new Point2D.Double(Main.random.nextInt(Main.width), Main.random.nextInt(Main.height));
-		speed += Main.random.nextGaussian()*0.25;
+		location = new Point2D.Double(Main.random.nextInt(Main.width), Main.random.nextInt(Main.height - 256) + 256);
+		speed += Main.random.nextGaussian() * 0.25;
 	}
-	
-	public Point2D.Double getLocation(){
+
+	public Point2D.Double getLocation() {
 		return location;
 	}
-	
+
 	public void takeDamage(int damage) {
 		health -= damage;
 	}
 
-	public boolean isAlive(){
-	
-		return health <= 0;
+	public boolean isAlive() {
+		if (health >= 0) {
+			if(Main.random.nextDouble() >0.8){
+				p.points++;
+			}
+			return true;
+		}
+		return false;
 	}
-	
+
 	public void update() {
 
 		angle = (float) MathHelper.getAngle(new Point((int) location.x, (int) location.y),
-				new Point((int) Player.location.x, (int) Player.location.y));
-		Point2D.Double gain = MathHelper.getPoint(location, Player.location, speed, 0);
+				new Point((int) p.location.x, (int) p.location.y));
+		Point2D.Double gain = MathHelper.getPoint(location, p.location, speed, 0);
 		location.setLocation(location.x + gain.x, location.y + gain.y);
-	
+
 	}
 
 	public void draw(Graphics g) {

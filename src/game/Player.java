@@ -10,14 +10,12 @@ import java.awt.geom.Point2D;
 
 public class Player {
 
-	public static Point2D.Double location;
+	public Point2D.Double location;
 	private Image picture;
 	private int playArea = 8;
 	private float angle;
 	private Point mouse;
-	
-	public static int points;
-	public int health, speed, accuracy, rateOfFire, damage, maxHealth;
+	public int health, speed, accuracy, rateOfFire, damage, maxHealth, points;
 
 	public Player() {
 

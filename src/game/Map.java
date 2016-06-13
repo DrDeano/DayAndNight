@@ -36,7 +36,7 @@ public class Map {
 		enemies = new ArrayList<Enemy>();
 		enemyLocations = new ArrayList<Rectangle>();
 		for (int i = 0; i < numOfEnemies; i++) {
-			enemies.add(new Enemy());
+			enemies.add(new Enemy(player));
 			enemyLocations.add(new Rectangle((int) enemies.get(i).getLocation().x - 16,
 					(int) enemies.get(i).getLocation().y - 16, 32, 32));
 		}
@@ -70,7 +70,7 @@ public class Map {
 
 	private void spawn() {
 		if (System.currentTimeMillis() >= timer) {
-			Enemy e = new Enemy();
+			Enemy e = new Enemy(player);
 			enemies.add(e);
 			enemyLocations.add(new Rectangle((int) enemies.get(enemies.indexOf(e)).getLocation().x - 16,
 					(int) enemies.get(enemies.indexOf(e)).getLocation().y - 16, 32, 32));
@@ -85,6 +85,10 @@ public class Map {
 		trajectories.add(MathHelper.getPoint(new Point2D.Double(player.location.x, player.location.y),
 				new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
 
+	}
+	
+	public void playerDamage(){
+		
 	}
 
 	public void update() {
