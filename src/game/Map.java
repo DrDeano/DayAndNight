@@ -101,7 +101,7 @@ public class Map {
 		double speed = 20.0;
 		trajectories.add(MathHelper.getPoint(new Point2D.Double(player.location.x, player.location.y),
 			new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
-
+		Sound.gunshot.play();
 	}
 
 	public void update() {
