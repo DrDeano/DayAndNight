@@ -23,7 +23,7 @@ public class Map {
 
 	private int numOfEnemies = 20;
 	private float healthRatio = 1;
-	private long timer;
+	private static long timer;
 
 	// Wave stuff
 	private int zombiesPerSecond = 2;
@@ -94,6 +94,7 @@ public class Map {
 	}
 
 	public static void newWave() {
+		timer = System.currentTimeMillis();
 		waveDurationLeft = waveDuration;
 		upgradesOpened = false;
 	}
@@ -104,7 +105,7 @@ public class Map {
 			shots.add(new Line2D.Double(player.location.x, player.location.y, player.location.x, player.location.y));
 			double speed = 20.0;
 			trajectories.add(MathHelper.getPoint(new Point2D.Double(player.location.x, player.location.y),
-					new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
+				new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
 			if (System.currentTimeMillis() > shotsound) {
 				Sound.gunshot.play();
 				shotsound = System.currentTimeMillis() + 500;
@@ -116,8 +117,7 @@ public class Map {
 	public void playerDamage() {
 
 		for (int i = 0; i < enemies.size(); i++) {
-			if (enemyLocations.get(i).intersects(player.hitBox)
-					&& System.currentTimeMillis() > enemies.get(i).attackTimer) {
+			if (enemyLocations.get(i).intersects(player.hitBox) && System.currentTimeMillis() > enemies.get(i).attackTimer) {
 				player.damage(25);
 				enemies.get(i).attackTimer = System.currentTimeMillis() + 1000;
 			}
