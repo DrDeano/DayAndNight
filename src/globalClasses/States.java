@@ -26,7 +26,7 @@ package globalClasses;
  * Pool_table: Packet
  * SABOTAGE_INTERRUPTED: null
  * NIHGT_STARTED: null
- * GAME_ENDED: (don't need to receiver any thing)
+ * GAME_ENDED: boolean
  * INITIAL_CONNECT: ClientConnect
  * UPDATE_LOBBY: See Ed
  * @author Edward Dean

@@ -16,7 +16,6 @@ import globalClasses.States;
  * @author The_Dean */
 public class Server {
 
-//	public static ClientTable client_table = new ClientTable();
 	private static ArrayList<ServerLobby> server_lobbies = new ArrayList<ServerLobby>();
 	private static int lobby_count = -1;
 
@@ -93,19 +92,16 @@ public class Server {
 				
 				if (new_player) { // New user
 					if (lobby_index > lobby_count) { // new lobby
-						to_client.writeObject(new Packet("Main server", States.INITIAL_CONNECT, new ClientConnect(true, true)));
-						to_client.flush();
+						write_to_client(new Packet("Main server", States.INITIAL_CONNECT, new ClientConnect(true, true)), to_client);
 						
 						server_lobbies.add(new ServerLobby());
 						
 						server_lobbies.get(lobby_index).add_player(client_name, to_client, from_client);
 					} else {
 						if (server_lobbies.get(lobby_index).get_number_of_players() > 6) {
-							to_client.writeObject(new Packet("Main server", States.INITIAL_CONNECT, new ClientConnect(true, false)));
-							to_client.flush();
+							write_to_client(new Packet("Main server", States.INITIAL_CONNECT, new ClientConnect(true, false)), to_client);
 						} else {
-							to_client.writeObject(new Packet("Main server", States.INITIAL_CONNECT, new ClientConnect(true, true)));
-							to_client.flush();
+							write_to_client(new Packet("Main server", States.INITIAL_CONNECT, new ClientConnect(true, true)), to_client);
 							
 							server_lobbies.get(lobby_index).add_player(client_name, to_client, from_client);
 						}	
@@ -113,8 +109,7 @@ public class Server {
 				} else {
 					// Tell to client that there name already exists and choose
 					// another
-					to_client.writeObject(new Packet("Main server", States.INITIAL_CONNECT, new ClientConnect(false, false)));
-					to_client.flush();
+					write_to_client(new Packet("Main server", States.INITIAL_CONNECT, new ClientConnect(false, false)), to_client);
 				}
 			}
 		} catch (IOException e) {
@@ -124,19 +119,19 @@ public class Server {
 	}
 	
 	private static void send_lobby_info(ObjectOutputStream to_client) {
+		write_to_client(new Packet("Main server", States.UPDATE_LOBBY, null), to_client);
+		write_to_client(lobby_count, to_client);
+		
+		for (ServerLobby lobby : server_lobbies) {
+			write_to_client(lobby.get_players(), to_client);
+			write_to_client(lobby.get_is_playing(), to_client);
+		}
+	}
+	
+	private static void write_to_client(Object obj, ObjectOutputStream to_client) {
 		try {
-			to_client.writeObject(new Packet("Main server", States.UPDATE_LOBBY, null));
+			to_client.writeObject(obj);
 			to_client.flush();
-			
-			to_client.writeObject(lobby_count);
-			to_client.flush();
-			
-			for (ServerLobby lobby : server_lobbies) {
-				to_client.writeObject(lobby.get_players());
-				to_client.flush();
-				
-				to_client.writeObject(lobby.get_is_playing());
-			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
