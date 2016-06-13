@@ -16,6 +16,7 @@ public class Player {
 	private float angle;
 	private Point mouse;
 	
+	public static int points;
 	public int health, speed, accuracy, rateOfFire, damage, maxHealth;
 
 	public Player() {
