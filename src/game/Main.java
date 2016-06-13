@@ -69,7 +69,7 @@ public class Main extends JFrame {
 		heightpx = (float) height / tilesH;
 		widthpx = (float) width / tilesW;
 		map = new Map();
-		//Sound.dayNNight.loop();
+		Sound.dayNNight.loop();
 	}
 
 	

@@ -11,8 +11,8 @@ import main.ResourceLoader;
 
 public class Sound {
 
-	public static final Sound dayNNight = new Sound("DayNNite-HQ.wav");
-	public static final Sound gunshot = new Sound("gunshot.wav");
+	public static final Sound dayNNight = new Sound("DayNNite-HQ-lowVol.wav");
+	public static final Sound gunshot = new Sound("gunshot2.wav");
 
 	private Clip clip;
 	private AudioInputStream sound;
