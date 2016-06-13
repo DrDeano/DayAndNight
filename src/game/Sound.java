@@ -1,4 +1,4 @@
-package main;
+package game;
 
 import java.io.IOException;
 
@@ -7,12 +7,13 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 
+import main.ResourceLoader;
+
 public class Sound {
-	
-	public static final Sound dayNNight = new Sound("DayNNite-003.wav");
-	public static final Sound slurp = new Sound("slurping.wav");
-	public static final Sound type = new Sound("typing.wav");
-	
+
+	public static final Sound dayNNight = new Sound("DayNNite-HQ.wav");
+	public static final Sound gunshot = new Sound("gunshot.wav");
+
 	private Clip clip;
 	private AudioInputStream sound;
 
@@ -27,16 +28,17 @@ public class Sound {
 			e.printStackTrace();
 		}
 	}
-	
-	public void play(){
+
+	public void play() {
+		clip.setFramePosition(0);
 		clip.start();
 	}
-	
-	public void stop(){
+
+	public void stop() {
 		clip.stop();
 	}
-	
-	public void loop(){
+
+	public void loop() {
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 

@@ -102,8 +102,8 @@ public class Map {
 		shots.add(new Line2D.Double(player.location.x, player.location.y, player.location.x, player.location.y));
 		double speed = 20.0;
 		trajectories.add(MathHelper.getPoint(new Point2D.Double(player.location.x, player.location.y),
-				new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
-
+			new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
+		Sound.gunshot.play();
 	}
 
 	public void playerDamage() {
@@ -114,7 +114,6 @@ public class Map {
 				enemies.get(i).attackTimer = System.currentTimeMillis() + 1000;
 			}
 		}
-		
 	}
 
 	public void update() {
