@@ -52,14 +52,14 @@ public class MathHelper {
 				}
 			}
 			return -angle;
-		}else if(p1.x > p2.x){
+		} else if (p1.x > p2.x) {
 			return Math.PI;
-		}else if(p1.x < p2.x){
+		} else if (p1.x < p2.x) {
 			return 0.0;
-		}else if(p1.y > p2.y){
-			return -Math.PI/2.0;
-		}else if(p1.y < p2.y){
-			return Math.PI/2.0;
+		} else if (p1.y > p2.y) {
+			return -Math.PI / 2.0;
+		} else if (p1.y < p2.y) {
+			return Math.PI / 2.0;
 		}
 		return 0.0;
 	}
@@ -78,14 +78,14 @@ public class MathHelper {
 				}
 			}
 			return -angle;
-		}else if(p1.x > p2.x){
+		} else if (p1.x > p2.x) {
 			return Math.PI;
-		}else if(p1.x < p2.x){
+		} else if (p1.x < p2.x) {
 			return 0.0;
-		}else if(p1.y > p2.y){
-			return -Math.PI/2.0;
-		}else if(p1.y < p2.y){
-			return Math.PI/2.0;
+		} else if (p1.y > p2.y) {
+			return -Math.PI / 2.0;
+		} else if (p1.y < p2.y) {
+			return Math.PI / 2.0;
 		}
 		return 0.0;
 	}
@@ -94,7 +94,7 @@ public class MathHelper {
 	// set accuracy to zero for perfect next point
 	public static Point2D.Double getPoint(Point2D.Double p1, Point2D.Double p2, double speed, double accuracy) {
 		double angle = 0;
-		if ((int) p1.x != (int) p2.x && (int) p1.y != (int) p2.y) {
+		if (p1.x != p2.x && p1.y != p2.y) {
 			double xdif = (p2.getX() - p1.getX());
 			double ydif = (p2.getY() - p1.getY());
 			angle = 0; // in radians
@@ -116,14 +116,14 @@ public class MathHelper {
 			ygain = -Math.sin(angle) * speed;
 
 			return new Point2D.Double(xgain, ygain);
-		}else if(p1.x > p2.x){
+		} else if (p1.x > p2.x) {
 			angle = Math.PI;
-		}else if(p1.x < p2.x){
+		} else if (p1.x < p2.x) {
 			angle = 0;
-		}else if(p1.y > p2.y){
-			angle = Math.PI/2;
-		}else if(p1.y < p2.y){
-			angle = -Math.PI/2;
+		} else if (p1.y > p2.y) {
+			angle = Math.PI / 2;
+		} else if (p1.y < p2.y) {
+			angle = -Math.PI / 2;
 		}
 		if (accuracy != 0) {
 			angle += (Main.random.nextGaussian() * accuracy);
