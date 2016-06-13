@@ -30,6 +30,9 @@ public class Map {
 	private int zombieHealth = 100;
 	private int waveDuration = 15000;
 	private int waveDurationLeft = waveDuration;
+	private long shotsound = 0;
+
+	private long shottimer = 200;
 
 	public Map() {
 		init();
@@ -98,18 +101,25 @@ public class Map {
 	}
 
 	public void shoot(Point mouseCoord) {
-		double accuracy = 1.0 / player.accuracy;
-		shots.add(new Line2D.Double(player.location.x, player.location.y, player.location.x, player.location.y));
-		double speed = 20.0;
-		trajectories.add(MathHelper.getPoint(new Point2D.Double(player.location.x, player.location.y),
-			new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
-		Sound.gunshot.play();
+		if (System.currentTimeMillis() > shottimer) {
+			double accuracy = 1.0 / player.accuracy;
+			shots.add(new Line2D.Double(player.location.x, player.location.y, player.location.x, player.location.y));
+			double speed = 20.0;
+			trajectories.add(MathHelper.getPoint(new Point2D.Double(player.location.x, player.location.y),
+					new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
+			if (System.currentTimeMillis() > shotsound) {
+				Sound.gunshot.play();
+				shotsound = System.currentTimeMillis() + 500;
+			}
+			shottimer = System.currentTimeMillis() + 250;
+		}
 	}
 
 	public void playerDamage() {
 
-		for(int i = 0; i < enemies.size(); i++){
-			if(enemyLocations.get(i).intersects(player.hitBox) && System.currentTimeMillis() > enemies.get(i).attackTimer){
+		for (int i = 0; i < enemies.size(); i++) {
+			if (enemyLocations.get(i).intersects(player.hitBox)
+					&& System.currentTimeMillis() > enemies.get(i).attackTimer) {
 				player.damage(25);
 				enemies.get(i).attackTimer = System.currentTimeMillis() + 1000;
 			}
@@ -163,7 +173,7 @@ public class Map {
 			enemy.update();
 		}
 
-		healthRatio = (player.health / player.maxHealth) * 1000f;
+		healthRatio = (player.health * 1000f / player.maxHealth);
 
 	}
 
@@ -181,6 +191,7 @@ public class Map {
 		g.fillRect(Main.width / 2 - 500, 50, 1000, 20);
 		g.setColor(Color.green);
 		g.fillRect(Main.width / 2 + 500 - (int) healthRatio, 50, (int) healthRatio, 20);
+		System.out.println(healthRatio + "," + player.health + "," + player.maxHealth);
 	}
 
 }
