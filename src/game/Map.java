@@ -31,7 +31,6 @@ public class Map {
 	private static int waveDuration = 15000;
 	private static int waveDurationLeft = waveDuration;
 
-
 	public Map() {
 		init();
 	}
@@ -43,7 +42,7 @@ public class Map {
 		enemies = new ArrayList<Enemy>();
 		enemyLocations = new ArrayList<Rectangle>();
 		for (int i = 0; i < numOfEnemies; i++) {
-			enemies.add(new Enemy());
+			enemies.add(new Enemy(player));
 			enemyLocations.add(new Rectangle((int) enemies.get(i).getLocation().x - 16, (int) enemies.get(i).getLocation().y - 16, 32, 32));
 		}
 		trajectories = new ArrayList<Point2D.Double>();
@@ -76,7 +75,7 @@ public class Map {
 
 	private void spawn() {
 		if (waveDurationLeft > 0 && System.currentTimeMillis() >= timer) {
-			Enemy e = new Enemy();
+			Enemy e = new Enemy(player);
 			e.health = zombieHealth;
 			enemies.add(e);
 			enemyLocations.add(new Rectangle((int) enemies.get(enemies.indexOf(e)).getLocation().x - 16,
@@ -103,6 +102,10 @@ public class Map {
 		double speed = 20.0;
 		trajectories.add(MathHelper.getPoint(new Point2D.Double(player.location.x, player.location.y),
 			new Point2D.Double(mouseCoord.getX(), mouseCoord.getY()), speed, accuracy));
+
+	}
+
+	public void playerDamage() {
 
 	}
 
